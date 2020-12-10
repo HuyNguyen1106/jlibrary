@@ -28,13 +28,15 @@ CREATE TABLE `book` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(64) NOT NULL,
   `description` varchar(255) NOT NULL,
+  `unit_price` bigint unsigned NOT NULL DEFAULT '10000',
+  `author` varchar(128) NOT NULL,
+  `release_year` int unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` tinyint NOT NULL DEFAULT '1',
   `category_id` int unsigned DEFAULT NULL,
-  `unit_price` bigint unsigned NOT NULL DEFAULT '10000',
-  `author` varchar(128) NOT NULL,
-  `release_year` int unsigned DEFAULT NULL,
+  `available_count` int unsigned DEFAULT '0',
+  `total_count` int unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -88,9 +90,10 @@ DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `return_date` date DEFAULT NULL,
+  `extra_fee` bigint unsigned DEFAULT '0',
   `user_id` int unsigned DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `reader_id` int unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -211,4 +214,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-10 12:02:44
+-- Dump completed on 2020-12-10 13:13:38
