@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -69,7 +68,7 @@ public class Category implements Serializable {
     @NotNull
     @Column(name = "active")
     private short active;
-    @OneToMany(mappedBy = "categoryId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "categoryId")
     private Collection<Book> bookCollection;
 
     public Category() {
@@ -165,7 +164,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + id + "] " + title;
+        return "com.nchtd.POJO.Category[ id=" + id + " ]";
     }
     
 }

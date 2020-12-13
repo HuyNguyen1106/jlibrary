@@ -11,13 +11,14 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByCreatedAt", query = "SELECT u FROM User u WHERE u.createdAt = :createdAt"),
     @NamedQuery(name = "User.findByUpdatedAt", query = "SELECT u FROM User u WHERE u.updatedAt = :updatedAt"),
     @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
-    @NamedQuery(name = "User.findByIsSuperuser", query = "SELECT u FROM User u WHERE u.isSuperuser = :isSuperuser")})
+    @NamedQuery(name = "User.findByRoleId", query = "SELECT u FROM User u WHERE u.roleId = :roleId")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,7 +65,7 @@ public class User implements Serializable {
     private String email;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 32)
+    @Size(min = 1, max = 128)
     @Column(name = "password")
     private String password;
     @Column(name = "created_at")
@@ -79,9 +80,12 @@ public class User implements Serializable {
     private short active;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "is_superuser")
-    private short isSuperuser;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    @Column(name = "role_id")
+    private int roleId;
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Role role;
+    @OneToMany(mappedBy = "userId")
     private Collection<BookOrder> bookOrderCollection;
 
     public User() {
@@ -91,13 +95,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String email, String password, short active, short isSuperuser) {
+    public User(Integer id, String username, String email, String password, short active, int roleId) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.active = active;
-        this.isSuperuser = isSuperuser;
+        this.roleId = roleId;
     }
 
     public Integer getId() {
@@ -156,12 +160,20 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public short getIsSuperuser() {
-        return isSuperuser;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setIsSuperuser(short isSuperuser) {
-        this.isSuperuser = isSuperuser;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @XmlTransient

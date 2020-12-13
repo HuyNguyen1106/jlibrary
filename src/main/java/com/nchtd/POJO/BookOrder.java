@@ -6,12 +6,12 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,11 +20,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -38,9 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "BookOrder.findAll", query = "SELECT b FROM BookOrder b"),
     @NamedQuery(name = "BookOrder.findById", query = "SELECT b FROM BookOrder b WHERE b.id = :id"),
-    @NamedQuery(name = "BookOrder.findByCustomerName", query = "SELECT b FROM BookOrder b WHERE b.customerName = :customerName"),
-    @NamedQuery(name = "BookOrder.findByCustomerPhone", query = "SELECT b FROM BookOrder b WHERE b.customerPhone = :customerPhone"),
     @NamedQuery(name = "BookOrder.findByReturnDate", query = "SELECT b FROM BookOrder b WHERE b.returnDate = :returnDate"),
+    @NamedQuery(name = "BookOrder.findByExtraFee", query = "SELECT b FROM BookOrder b WHERE b.extraFee = :extraFee"),
+    @NamedQuery(name = "BookOrder.findByReaderId", query = "SELECT b FROM BookOrder b WHERE b.readerId = :readerId"),
     @NamedQuery(name = "BookOrder.findByCreatedAt", query = "SELECT b FROM BookOrder b WHERE b.createdAt = :createdAt"),
     @NamedQuery(name = "BookOrder.findByUpdatedAt", query = "SELECT b FROM BookOrder b WHERE b.updatedAt = :updatedAt"),
     @NamedQuery(name = "BookOrder.findByDeletedAt", query = "SELECT b FROM BookOrder b WHERE b.deletedAt = :deletedAt")})
@@ -52,19 +51,13 @@ public class BookOrder implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "customer_name")
-    private String customerName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 11)
-    @Column(name = "customer_phone")
-    private String customerPhone;
     @Column(name = "return_date")
     @Temporal(TemporalType.DATE)
     private Date returnDate;
+    @Column(name = "extra_fee")
+    private BigInteger extraFee;
+    @Column(name = "reader_id")
+    private Integer readerId;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -74,10 +67,13 @@ public class BookOrder implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "orderId")
     private Collection<OrderDetail> orderDetailCollection;
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Reader reader;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private User userId;
 
     public BookOrder() {
@@ -85,12 +81,6 @@ public class BookOrder implements Serializable {
 
     public BookOrder(Integer id) {
         this.id = id;
-    }
-
-    public BookOrder(Integer id, String customerName, String customerPhone) {
-        this.id = id;
-        this.customerName = customerName;
-        this.customerPhone = customerPhone;
     }
 
     public Integer getId() {
@@ -101,28 +91,28 @@ public class BookOrder implements Serializable {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCustomerPhone() {
-        return customerPhone;
-    }
-
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
-    }
-
     public Date getReturnDate() {
         return returnDate;
     }
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public BigInteger getExtraFee() {
+        return extraFee;
+    }
+
+    public void setExtraFee(BigInteger extraFee) {
+        this.extraFee = extraFee;
+    }
+
+    public Integer getReaderId() {
+        return readerId;
+    }
+
+    public void setReaderId(Integer readerId) {
+        this.readerId = readerId;
     }
 
     public Date getCreatedAt() {
@@ -156,6 +146,14 @@ public class BookOrder implements Serializable {
 
     public void setOrderDetailCollection(Collection<OrderDetail> orderDetailCollection) {
         this.orderDetailCollection = orderDetailCollection;
+    }
+
+    public Reader getReader() {
+        return reader;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
     }
 
     public User getUserId() {

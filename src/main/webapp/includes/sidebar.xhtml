@@ -2,41 +2,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <!--<h:outputStylesheet name="css/sidebar.css"/>-->
-        <style>
-            .sidenav {
-                height: 100%;
-                width: 160px;
-                position: fixed;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                background-color: #111;
-                overflow-x: hidden;
-                padding-top: 20px;
-              }
-
-              .sidenav a {
-                padding: 6px 8px 6px 16px;
-                text-decoration: none;
-                font-size: 25px;
-                color: #818181;
-                display: block;
-              }
-
-              .sidenav a:hover {
-                color: #f1f1f1;
-              }
-        </style>
-    </h:head>
     <h:body>
-        <div class="sidenav">
-            <a href="#about">Category</a>
-            <a href="#services">Book</a>
-            <a href="#clients">Order</a>
-            <a href="#clients">Retail</a>
-        </div>
+        <!-- Sidebar/menu -->
+        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top: 43px;" id="mySidebar"><br/>
+          <div class="w3-container w3-row">
+            <div class="w3-col s4">
+              <img src="https://w3schools.com/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px"/>
+            </div>
+            <div class="w3-col s8 w3-bar">
+              <span>Welcome, <strong>Admin</strong></span><br/>
+              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+            </div>
+          </div>
+          <hr/>
+          <div class="w3-container">
+            <h5>Dashboard</h5>
+          </div>
+          <div class="w3-bar-block">
+            <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/pages/user.xhtml"><i class="fa fa-users fa-fw"></i>  Users</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/pages/category.xhtml"><i class="fa fa-bookmark fa-fw"></i>  Categories</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/pages/book.xhtml"><i class="fa fa-book fa-fw"></i>  Books</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/pages/reader.xhtml"><i class="fa fa-book-reader fa-fw"></i>  Readers</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/pages/order.xhtml"><i class="fa fa-receipt w3-black"></i>  Orders</h:link>            
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/index.xhtml"><i class="fa fa-chart-bar fa-fw"></i>  Charts</h:link><br></br><br></br>
+            
+          </div>
+        </nav>
+        <!-- Overlay effect when opening sidebar on small screens -->
+        <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
     </h:body>
 </html>
 

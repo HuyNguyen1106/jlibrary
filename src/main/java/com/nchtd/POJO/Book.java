@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,19 +39,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Book.findById", query = "SELECT b FROM Book b WHERE b.id = :id"),
     @NamedQuery(name = "Book.findByTitle", query = "SELECT b FROM Book b WHERE b.title = :title"),
     @NamedQuery(name = "Book.findByDescription", query = "SELECT b FROM Book b WHERE b.description = :description"),
+    @NamedQuery(name = "Book.findByUnitPrice", query = "SELECT b FROM Book b WHERE b.unitPrice = :unitPrice"),
+    @NamedQuery(name = "Book.findByAuthor", query = "SELECT b FROM Book b WHERE b.author = :author"),
+    @NamedQuery(name = "Book.findByReleaseYear", query = "SELECT b FROM Book b WHERE b.releaseYear = :releaseYear"),
     @NamedQuery(name = "Book.findByCreatedAt", query = "SELECT b FROM Book b WHERE b.createdAt = :createdAt"),
     @NamedQuery(name = "Book.findByUpdatedAt", query = "SELECT b FROM Book b WHERE b.updatedAt = :updatedAt"),
     @NamedQuery(name = "Book.findByActive", query = "SELECT b FROM Book b WHERE b.active = :active"),
-    @NamedQuery(name = "Book.findByUnitPrice", query = "SELECT b FROM Book b WHERE b.unitPrice = :unitPrice")})
+    @NamedQuery(name = "Book.findByAvailableCount", query = "SELECT b FROM Book b WHERE b.availableCount = :availableCount"),
+    @NamedQuery(name = "Book.findByTotalCount", query = "SELECT b FROM Book b WHERE b.totalCount = :totalCount")})
 public class Book implements Serializable {
-
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 128)
-    @Column(name = "author")
-    private String author;
-    @Column(name = "release_year")
-    private Integer releaseYear;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -70,6 +65,17 @@ public class Book implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "description")
     private String description;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "unit_price")
+    private long unitPrice;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 128)
+    @Column(name = "author")
+    private String author;
+    @Column(name = "release_year")
+    private Integer releaseYear;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -80,14 +86,14 @@ public class Book implements Serializable {
     @NotNull
     @Column(name = "active")
     private short active;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "unit_price")
-    private long unitPrice;
+    @Column(name = "available_count")
+    private Integer availableCount;
+    @Column(name = "total_count")
+    private Integer totalCount;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Category categoryId;
-    @OneToMany(mappedBy = "bookId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bookId")
     private Collection<OrderDetail> orderDetailCollection;
 
     public Book() {
@@ -97,12 +103,13 @@ public class Book implements Serializable {
         this.id = id;
     }
 
-    public Book(Integer id, String title, String description, short active, long unitPrice) {
+    public Book(Integer id, String title, String description, long unitPrice, String author, short active) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.active = active;
         this.unitPrice = unitPrice;
+        this.author = author;
+        this.active = active;
     }
 
     public Integer getId() {
@@ -129,6 +136,30 @@ public class Book implements Serializable {
         this.description = description;
     }
 
+    public long getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(long unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -153,12 +184,20 @@ public class Book implements Serializable {
         this.active = active;
     }
 
-    public long getUnitPrice() {
-        return unitPrice;
+    public Integer getAvailableCount() {
+        return availableCount;
     }
 
-    public void setUnitPrice(long unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setAvailableCount(Integer availableCount) {
+        this.availableCount = availableCount;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     public Category getCategoryId() {
@@ -200,23 +239,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + id + "] " + title + " - " + author;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(Integer releaseYear) {
-        this.releaseYear = releaseYear;
+        return "com.nchtd.POJO.Book[ id=" + id + " ]";
     }
     
 }
