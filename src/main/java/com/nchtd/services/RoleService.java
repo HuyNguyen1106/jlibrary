@@ -5,7 +5,7 @@
  */
 package com.nchtd.services;
 
-import com.nchtd.POJO.User;
+import com.nchtd.POJO.Role;
 import com.nchtd.config.HibernateUtils;
 import java.util.List;
 import javax.persistence.Query;
@@ -19,14 +19,14 @@ import org.hibernate.SessionFactory;
  *
  * @author Admin
  */
-public class UserService {
+public class RoleService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public List<User> getAll() {
+    public List<Role> getAll() {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<User> query = builder.createQuery(User.class);
-            Root<User> root = query.from(User.class);
+            CriteriaQuery<Role> query = builder.createQuery(Role.class);
+            Root<Role> root = query.from(Role.class);
             
             query = query.select(root);
             
@@ -36,23 +36,35 @@ public class UserService {
         }
     }
     
-    public User getById(int id) {
-        try (Session session = FACTORY.openSession()) {
-            return session.get(User.class, id);
+    public Role getById(int id) {
+        try (Session session = FACTORY.openSession()) {           
+            return session.get(Role.class, id);
         }
     }
     
-    public boolean addOrSave(User u) {
+    public boolean addOrSave(Role obj) {
         try (Session session = FACTORY.openSession()) {
             try {
                 session.getTransaction().begin();
-                session.saveOrUpdate(u);
+                session.saveOrUpdate(obj);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 return false;
-            }
-            
+            }            
+        }
+        return true;
+    }
+    public boolean remove(Role obj) {
+        try (Session session = FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                session.remove(obj);
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                return false;
+            }            
         }
         return true;
     }

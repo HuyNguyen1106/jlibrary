@@ -20,7 +20,10 @@ import javax.faces.bean.ManagedBean;
 @RequestScoped
 @ManagedBean
 public class CategoryBean {
-
+    private static final CategoryService categoryService = new CategoryService();
+    private String title;
+    private String description;
+    
     /**
      * Creates a new instance of CategoryBean
      */
@@ -28,7 +31,46 @@ public class CategoryBean {
     }
     
     public List<Category> getList() {
-        return CategoryService.getAll();
+        return categoryService.getAll();
     }
     
+    public String addCate() {
+        Category c = new Category();
+        c.setTitle(this.getTitle());
+        c.setDescription(this.getDescription());
+        
+        if(categoryService.addOrSave(c) == true) {
+            return "index?faces-redirect=true";
+        }
+        
+        return "create";
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 // Get the Sidebar
-var mySidebar = document.getElementById("indexSidebar");
+var mySidebar = document.getElementById("mySidebar");
 
 // Get the DIV with overlay effect
 var overlayBg = document.getElementById("myOverlay");
@@ -25,12 +25,10 @@ function w3_close() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
-
-function showModal(id) {
-    $(id).show();
+function openModal(id) {
+    document.getElementById(id).style.display = 'block';
 }
-
-function hideModal(id) {
-    $(id).hide();
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
 }
 

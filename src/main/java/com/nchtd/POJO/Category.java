@@ -164,7 +164,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.Category[ id=" + id + " ]";
+        return String.valueOf(this.id);
     }
     
 }

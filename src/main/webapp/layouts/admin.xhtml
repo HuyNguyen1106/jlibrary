@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title><ui:insert name="title"></ui:insert></title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway"/>
+        <script src="https://kit.fontawesome.com/f8d98a303b.js" crossorigin="anonymous"></script>
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0.11/css/fontawesome.min.css" integrity="sha512-kJ30H6g4NGhWopgdseRb8wTsyllFUYIx3hiUwmGAkgA9B/JbzUBDQVr2VVlWGde6sdBVOG7oU8AL35ORDuMm8g==" crossorigin="anonymous" />-->
+        <h:outputStylesheet library="css" name="admin.css"/>
+        <f:loadBundle var="adminMsg" basename="users"/>
+    </h:head>
+    <h:body class="w3-light-grey">
+        <ui:insert name="header">
+            <ui:include src="../includes/header-admin.xhtml" />
+        </ui:insert>
+        <ui:insert name="sidebar">
+            <ui:include src="../includes/sidebar-admin.xhtml" />
+        </ui:insert>
+        <div class="w3-main" style="margin-left:300px;margin-top:43px;padding: 10px;">
+            <ui:insert name="content">
+
+            </ui:insert>
+        </div>
+        <h:outputScript library="js" name="admin.js"/>
+    </h:body>
+</html>
+

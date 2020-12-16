@@ -22,7 +22,7 @@ import org.hibernate.SessionFactory;
 public class CategoryService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public static List<Category> getAll() {
+    public List<Category> getAll() {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery query = builder.createQuery();
@@ -34,5 +34,38 @@ public class CategoryService {
             
             return q.getResultList();
         }
+    }
+    
+    public Category getById(int id) {
+        try (Session session = FACTORY.openSession()) {            
+            return session.get(Category.class, id);
+        }
+    }
+    
+    public boolean addOrSave(Category cate) {
+        try (Session session = FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                session.saveOrUpdate(cate);
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                return false;
+            }            
+        }
+        return true;
+    }
+    public boolean remove(Category cate) {
+        try (Session session = FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                session.remove(cate);
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                return false;
+            }            
+        }
+        return true;
     }
 }

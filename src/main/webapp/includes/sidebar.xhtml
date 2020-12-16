@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <!-- Sidebar/menu -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top: 43px;" id="mySidebar"><br/>
-          <div class="w3-container w3-row">
-            <div class="w3-col s4">
-              <img src="https://w3schools.com/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px"/>
-            </div>
-            <div class="w3-col s8 w3-bar">
-              <span>Welcome, <strong>Admin</strong></span><br/>
-              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-              <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
-            </div>
+        <nav class=" w3-collapse w3-white h-100" style="z-index:3;width:200px;" id="indexSidebar"><br/>
+          <div class="w3-container">
+              <h3>Category</h3>
           </div>
           <hr/>
-          <div class="w3-container">
-            <h5>Dashboard</h5>
-          </div>
+          
           <div class="w3-bar-block">
-            <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/users/index"><i class="fa fa-users fa-fw"></i>  Users</h:link>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/categories/index"><i class="fa fa-bookmark fa-fw"></i>  Categories</h:link>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/books/index"><i class="fa fa-book fa-fw"></i>  Books</h:link>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/readers/index"><i class="fa fa-book-reader fa-fw"></i>  Readers</h:link>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/orders/index"><i class="fa fa-receipt w3-black"></i>  Orders</h:link>            
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/index"><i class="fa fa-chart-bar fa-fw"></i>  Charts</h:link><br></br><br></br>
+            <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fas fa-remove"></i>  Close Menu</a>
+            <c:forEach var="c" items="#{categoryBean.list}">
+                <h:link class="w3-bar-item w3-button w3-padding" outcome="index?cate_id=#{c.id}">#{c.title}</h:link>
+            </c:forEach>
+            
             
           </div>
         </nav>

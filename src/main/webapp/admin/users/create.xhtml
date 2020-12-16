@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../../layouts/admin.xhtml">
+        <ui:define name="title">#{adminMsg['users.new']}</ui:define>
+        <ui:define name="content">            
+            <h:form>
+                <div class="card">
+                    <div class="card-header">#{adminMsg['users.new']}</div>
+                    <div class="card-body">
+                        <h:panelGroup class="input-group form-group">
+                            <div class="input-group-prepend">
+                              <h:outputLabel value="#{adminMsg['users.username']}" styleClass="input-group-text"/>
+                            </div>
+                            <h:inputText id="txtUsername" required="true" styleClass="form-control" value="#{userBean.username}"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="input-group form-group">
+                            <div class="input-group-prepend">
+                              <h:outputLabel value="#{adminMsg['users.password']}" styleClass="input-group-text"/>
+                            </div>
+                            <h:inputSecret id="txtPassword" required="true" styleClass="form-control" value="#{userBean.password}"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="input-group form-group">
+                            <div class="input-group-prepend">
+                              <h:outputLabel value="#{adminMsg['users.email']}" styleClass="input-group-text"/>
+                            </div>
+                            <h:inputText id="txtEmail" required="true" styleClass="form-control" value="#{userBean.email}"/>
+                            
+                        </h:panelGroup>
+                        <h:panelGroup class="input-group form-group">
+                            <div class="input-group-prepend">
+                              <h:outputLabel value="#{adminMsg['users.role']}" styleClass="input-group-text"/>
+                            </div>
+
+                            <h:selectOneMenu id="role" required="true" styleClass="form-control" value="#{userBean.role}" converter="UserRoleConverter">
+                                <f:selectItems var="r" value="#{roleBean.roles}" itemLabel="#{r.name}" itemValue="#{r.toString()}"/>
+                            </h:selectOneMenu>
+
+                        </h:panelGroup>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <h:link styleClass="btn btn-outline-info mt-2" outcome="/admin/users/index">#{adminMsg['backBtn']}</h:link>
+                        <h:commandButton action="#{userBean.addUser()}" type="submit" styleClass="btn btn-outline-success mt-2 ml-4" value="#{adminMsg['submitBtn']}"></h:commandButton>
+                    </div>
+                </div>
+            </h:form>           
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

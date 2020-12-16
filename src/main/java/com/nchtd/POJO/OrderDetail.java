@@ -130,7 +130,7 @@ public class OrderDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.OrderDetail[ id=" + id + " ]";
+        return String.valueOf(this.id);
     }
     
 }

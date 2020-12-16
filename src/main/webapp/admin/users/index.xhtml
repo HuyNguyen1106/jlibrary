@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../../layouts/admin.xhtml">
+        <ui:define name="title">#{adminMsg["users.admin"]}</ui:define>
+        <ui:define name="content">
+            <h2>#{adminMsg["users.admin"]}</h2>
+            <!-- Create new user -->
+            <h:link class="btn btn-outline-primary mb-2" outcome="/admin/users/create">#{adminMsg["users.create"]}</h:link>
+            
+            <h:panelGrid class="table text-center" id = "panel" columns = "5" border = "1" cellpadding = "10" cellspacing = "1">
+                <h:panelGroup>#{adminMsg["users.id"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["users.username"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["users.email"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["users.role"]}</h:panelGroup>
+                <h:panelGroup></h:panelGroup>
+                <c:forEach items="#{userBean.list}" var="u">
+                    <h:panelGroup>
+                        <h:link class="text-primary" onclick="alert('show user detail modal')">#{u.id}</h:link>
+                    </h:panelGroup>                    
+                    <h:outputLabel value = "#{u.username}" />
+                    <h:outputLabel value = "#{u.email}" />
+                    <h:outputLabel value = "#{u.role.name}" />
+                    <h:panelGroup>
+                        <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/users/create?faces-redirect=true">
+                            <f:param name="user_id" value="#{u.id}"/>
+                        </h:link>
+                        <h:form style="display: inline-block;">
+                            <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
+                                <f:ajax />
+                            </h:commandLink>
+                        </h:form>
+                    </h:panelGroup>
+                </c:forEach>
+                
+            </h:panelGrid>
+            <!-- Modal -->
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -15,10 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,8 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByCreatedAt", query = "SELECT u FROM User u WHERE u.createdAt = :createdAt"),
     @NamedQuery(name = "User.findByUpdatedAt", query = "SELECT u FROM User u WHERE u.updatedAt = :updatedAt"),
-    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
-    @NamedQuery(name = "User.findByRoleId", query = "SELECT u FROM User u WHERE u.roleId = :roleId")})
+    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -78,12 +77,8 @@ public class User implements Serializable {
     @NotNull
     @Column(name = "active")
     private short active;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "role_id")
-    private int roleId;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
     private Role role;
     @OneToMany(mappedBy = "userId")
     private Collection<BookOrder> bookOrderCollection;
@@ -95,13 +90,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String email, String password, short active, int roleId) {
+    public User(Integer id, String username, String email, String password, short active) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.active = active;
-        this.roleId = roleId;
     }
 
     public Integer getId() {
@@ -160,14 +154,6 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -207,7 +193,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.User[ id=" + id + " ]";
+        return String.valueOf(this.id);
     }
     
 }
