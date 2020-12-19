@@ -37,6 +37,7 @@ CREATE TABLE `book` (
   `category_id` int unsigned DEFAULT NULL,
   `available_count` int unsigned DEFAULT '0',
   `total_count` int unsigned DEFAULT '0',
+  `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -67,7 +68,7 @@ CREATE TABLE `category` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +77,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Education','Sách giáo khoa','2020-12-05 07:45:39','2020-12-05 09:10:53',1),(2,'Romance','Sách lãng mạn','2020-12-05 07:45:39','2020-12-05 09:10:53',1);
+INSERT INTO `category` VALUES (1,'Education','Sách giáo khoa','2020-12-05 07:45:39','2020-12-05 09:10:53',1),(2,'Romance','Sách lãng mạn','2020-12-05 07:45:39','2020-12-05 09:10:53',1),(3,'new cate','',NULL,NULL,0);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,8 +217,9 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  CONSTRAINT `role_id` FOREIGN KEY (`id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `role_id_idx` (`role_id`),
+  CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,7 +228,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','nguyenhuy182515@gmail.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-11 03:40:32','2020-12-11 03:40:40',1,1);
+INSERT INTO `user` VALUES (1,'admin','nguyenhuy182515@gmail.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 08:36:16','2020-12-15 08:36:16',1,1),(2,'test','test@test.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 09:20:42','2020-12-15 09:20:42',1,2),(3,'test1','test1@test.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 09:29:25','2020-12-15 09:29:25',1,1),(4,'test create user','test3@gmail.com','123456',NULL,NULL,0,2),(6,'tester','test3@gmail.com.vn','123456',NULL,NULL,0,2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -239,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-11 10:41:56
+-- Dump completed on 2020-12-19 14:29:47

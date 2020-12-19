@@ -93,6 +93,8 @@ public class Book implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
+    @Column(name = "image")
+    private String image;
     @OneToMany(mappedBy = "bookId")
     private Collection<OrderDetail> orderDetailCollection;
 
@@ -240,6 +242,20 @@ public class Book implements Serializable {
     @Override
     public String toString() {
         return String.valueOf(this.id);
+    }
+
+    /**
+     * @return the image
+     */
+    public String getImage() {
+        return image;
+    }
+
+    /**
+     * @param image the image to set
+     */
+    public void setImage(String image) {
+        this.image = image;
     }
     
 }
