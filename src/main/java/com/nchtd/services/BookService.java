@@ -22,10 +22,10 @@ import org.hibernate.SessionFactory;
 public class BookService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public static List<Book> getAll() {
+    public List<Book> getAll() {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery query = builder.createQuery();
+            CriteriaQuery<Book> query = builder.createQuery(Book.class);
             Root<Book> root = query.from(Book.class);
             
             query = query.select(root);
@@ -33,6 +33,25 @@ public class BookService {
             Query q = session.createQuery(query);
             
             return q.getResultList();
+        }
+    }
+    public Book getById(int id) {
+        try (Session session = FACTORY.openSession()) {
+            return session.get(Book.class, id);
+        }
+    }
+    public boolean addOrSave(Book b) {
+        try (Session session = FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                session.saveOrUpdate(b);
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                e.printStackTrace();
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -10,15 +10,17 @@
             <ui:define name="content">
                 <div class="container">
                     <div class="row">
-                        <div class="card col-md-3">
-                            <img src="#{resource['images/sample/book-sample.png']}" class="card-img-top" alt="..." height="175"/>
-                            <div class="card-body">
-                                <h5 class="card-title"><strong>Book title</strong></h5>
-                              <p class="card-text">Author and Release year</p>
-                              <a href="#" class="btn btn-primary float-right">Rent</a>
+                        <c:forEach var="item" items="#{bookBean.books}">
+                            <div class="card col-md-3">
+                                <img src="resources/images/#{item.image}" class="card-img-top" alt="..." height="175"/>
+                                <div class="card-body">
+                                    <h5 class="card-title"><strong>#{item.title}</strong></h5>
+                                    <p class="card-text">#{item.author} - #{item.releaseYear}</p>
+                                    <p class="card-text">Price: #{item.unitPrice}</p>
+                                  <a href="#" class="btn btn-primary float-right">Rent</a>
+                                </div>
                             </div>
-                        </div>
-                        
+                        </c:forEach>
                     </div>
                  
                 </div>
