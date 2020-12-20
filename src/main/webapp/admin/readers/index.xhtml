@@ -2,12 +2,50 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="../../layouts/admin.xhtml">
-        <ui:define name="title">Users</ui:define>
+        <ui:define name="title">#{adminMsg["reader.admin"]}</ui:define>
         <ui:define name="content">
-            <h5>User manager</h5>
+            <h2>#{adminMsg["reader.admin"]}</h2>
+            <!-- Create new category -->
+            <h:link class="btn btn-outline-primary mb-2" 
+                    outcome="/admin/readers/create">
+                #{adminMsg["reader.create"]}
+            </h:link>
+            <h:panelGrid class="table text-center" id = "panel" columns = "6" border = "1" cellpadding = "10" cellspacing = "1" >
+                <h:panelGroup>#{adminMsg["reader.id"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["reader.fullname"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["reader.email"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["reader.address"]}</h:panelGroup>
+                <h:panelGroup>#{adminMsg["reader.phone"]}</h:panelGroup>
+                <h:panelGroup></h:panelGroup>
+                <c:forEach items="#{readerBean.list}" var="c">
+                    <h:outputLabel value = "#{c.id}" />
+                    <h:outputLabel value = "#{c.firstname}" />
+                    <h:outputLabel value = "#{c.email}" />
+                    <h:outputText value = "#{c.address}" />
+                    <h:outputLabel value = "#{c.phone}" />
+                    
+                    <h:panelGroup>
+                        <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" 
+                                includeViewParams="true" outcome="/admin/readers/create?faces-redirect=true">
+                            
+                            <f:param name="reader_id" value="#{c.id}"/>
+                        </h:link>
+                        <h:form style="display: inline-block;">
+                            <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
+                                <f:ajax listener="#{readerBean.deleteReader(c)}" onerror="deleteError" onevent="deleteSuccess"/>
+                            </h:commandLink>
+                        </h:form>
+                    </h:panelGroup>
+                </c:forEach>
+                
+            </h:panelGrid>
+            
         </ui:define>
+        
     </ui:composition>
 </html>
 

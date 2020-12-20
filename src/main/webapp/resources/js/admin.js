@@ -32,3 +32,9 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
+function deleteSuccess(){
+    alert("Delete successfully");
+}
+function deleteError(){
+    alert("Delete failed");
+}

@@ -6,21 +6,25 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -65,7 +69,7 @@ public class Reader implements Serializable {
     @Size(max = 255)
     @Column(name = "address")
     private String address;
-    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Size(max = 11)
     @Column(name = "phone")
     private String phone;
@@ -78,8 +82,8 @@ public class Reader implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "reader")
-    private BookOrder bookOrder;
+    @OneToMany(mappedBy = "readerId")
+    private Collection<BookOrder> bookOrderCollection;
 
     public Reader() {
     }
@@ -165,14 +169,6 @@ public class Reader implements Serializable {
         this.deletedAt = deletedAt;
     }
 
-    public BookOrder getBookOrder() {
-        return bookOrder;
-    }
-
-    public void setBookOrder(BookOrder bookOrder) {
-        this.bookOrder = bookOrder;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -196,6 +192,20 @@ public class Reader implements Serializable {
     @Override
     public String toString() {
         return String.valueOf(this.id);
+    }
+
+    /**
+     * @return the bookOrderCollection
+     */
+    public Collection<BookOrder> getBookOrderCollection() {
+        return bookOrderCollection;
+    }
+
+    /**
+     * @param bookOrderCollection the bookOrderCollection to set
+     */
+    public void setBookOrderCollection(Collection<BookOrder> bookOrderCollection) {
+        this.bookOrderCollection = bookOrderCollection;
     }
     
 }

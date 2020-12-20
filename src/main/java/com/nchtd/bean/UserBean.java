@@ -51,7 +51,13 @@ public class UserBean {
         
         return "create";
     }
-
+    public String delete (User user) throws Exception{
+        user.setActive(Short.parseShort("0"));
+        if (userService.addOrSave(user) == true){
+            return "successful";
+        }
+        throw new Exception("Delete failed");
+    }
     /**
      * @return the userId
      */

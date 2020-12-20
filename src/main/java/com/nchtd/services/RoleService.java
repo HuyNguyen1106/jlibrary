@@ -42,11 +42,11 @@ public class RoleService {
         }
     }
     
-    public boolean addOrSave(Role obj) {
+    public boolean addOrSave(Role o) {
         try (Session session = FACTORY.openSession()) {
             try {
                 session.getTransaction().begin();
-                session.saveOrUpdate(obj);
+                session.saveOrUpdate(o);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
@@ -55,17 +55,22 @@ public class RoleService {
         }
         return true;
     }
-    public boolean remove(Role obj) {
+    public boolean deleteRole(Role role){
         try (Session session = FACTORY.openSession()) {
-            try {
-                session.getTransaction().begin();
-                session.remove(obj);
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                return false;
-            }            
+                try {
+                    session.getTransaction().begin();
+                    session.delete(role);
+                    session.getTransaction().commit();
+                } catch (Exception e) {
+                    session.getTransaction().rollback();
+                    return false;
+                }
+                return true;
+            }
+    }
+    public Role getRoleById(int roleId){
+        try (Session session = FACTORY.openSession()){
+            return session.get(Role.class, roleId);
         }
-        return true;
     }
 }

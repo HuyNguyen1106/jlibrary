@@ -7,6 +7,7 @@ package com.nchtd.POJO;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -114,6 +115,10 @@ public class Role implements Serializable {
 
     public void setUserCollection(Collection<User> userCollection) {
         this.userCollection = userCollection;
+    }
+
+    public void setDeletedAt(Date date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

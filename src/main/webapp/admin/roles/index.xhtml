@@ -28,7 +28,7 @@
                         </h:link>
                         <h:form style="display: inline-block;">
                             <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
-                                <f:ajax />
+                                <f:ajax listener="#{roleBean.deleteRole(i)}" onerror="deleteError" onevent="deleteSuccess"/>
                             </h:commandLink>
                         </h:form>
                     </h:panelGroup>

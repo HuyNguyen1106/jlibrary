@@ -28,7 +28,7 @@ public class UserService {
             CriteriaQuery<User> query = builder.createQuery(User.class);
             Root<User> root = query.from(User.class);
             
-            query = query.select(root);
+            query = query.select(root).where(builder.equal(root.get("active"), Short.parseShort("1")));
             
             Query q = session.createQuery(query);
             

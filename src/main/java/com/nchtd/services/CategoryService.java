@@ -55,11 +55,11 @@ public class CategoryService {
         }
         return true;
     }
-    public boolean remove(Category cate) {
+    public boolean deleteCate(Category cate) {
         try (Session session = FACTORY.openSession()) {
             try {
                 session.getTransaction().begin();
-                session.remove(cate);
+                session.delete(cate);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
@@ -67,5 +67,10 @@ public class CategoryService {
             }            
         }
         return true;
+    }
+    public Category getCategoryById(int cateId){
+        try (Session session = FACTORY.openSession()){
+            return session.get(Category.class, cateId);
+        }
     }
 }
