@@ -3,21 +3,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template = "layouts/base.xhtml">
             <ui:define name = "title">J Library</ui:define>
             <ui:define name="content">
+<!--                <f:metadata>
+                    <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
+                </f:metadata>-->
                 <div class="container">
                     <div class="row">
                         <c:forEach var="item" items="#{bookBean.books}">
-                            <div class="card col-md-3">
-                                <img src="resources/images/#{item.image}" class="card-img-top" alt="..." height="175"/>
-                                <div class="card-body">
-                                    <h5 class="card-title"><strong>[#{item.id}]#{item.title}</strong></h5>
-                                    <p class="card-text">#{item.author} - #{item.releaseYear}</p>
-                                    <p class="card-text">Price: #{item.unitPrice}</p>
-                                  <a href="#" class="btn btn-primary float-right">Rent</a>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <h:graphicImage library="images" name="#{item.image}" height="175"></h:graphicImage>
+                                    <!--<img src="resources/images/#{item.image}" class="card-img-top" alt="..." height="175"/>-->
+                                    <div class="card-body">
+                                        
+                                    </div>
+
+                                </div>
+                                <div class="p-2">
+                                    <h5 class=""><strong>[#{item.id}] #{item.title}</strong> <span class="badge badge-success">#{item.unitPrice}</span></h5>
+                                    <p class="">#{item.author} - #{item.releaseYear}</p>
+                                    
+                                    <h:form>
+                                        <h:commandLink styleClass="btn btn-primary fullw" value="Rent">
+                                            <f:ajax listener="#{cartBean.addToCart(item.id, item.title, item.unitPrice)}"></f:ajax>
+                                        </h:commandLink>
+                                    </h:form>
                                 </div>
                             </div>
                         </c:forEach>

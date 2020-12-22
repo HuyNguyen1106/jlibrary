@@ -8,42 +8,50 @@
     <ui:composition template="../../layouts/admin.xhtml">
         <ui:define name="title">#{adminMsg["reader.admin"]}</ui:define>
         <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
+            </f:metadata>
             <h2>#{adminMsg["reader.admin"]}</h2>
             <!-- Create new category -->
             <h:link class="btn btn-outline-primary mb-2" 
                     outcome="/admin/readers/create">
                 #{adminMsg["reader.create"]}
             </h:link>
-            <h:panelGrid class="table text-center" id = "panel" columns = "6" border = "1" cellpadding = "10" cellspacing = "1" >
-                <h:panelGroup>#{adminMsg["reader.id"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["reader.fullname"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["reader.email"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["reader.address"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["reader.phone"]}</h:panelGroup>
-                <h:panelGroup></h:panelGroup>
-                <c:forEach items="#{readerBean.list}" var="c">
-                    <h:outputLabel value = "#{c.id}" />
-                    <h:outputLabel value = "#{c.firstname}" />
-                    <h:outputLabel value = "#{c.email}" />
-                    <h:outputText value = "#{c.address}" />
-                    <h:outputLabel value = "#{c.phone}" />
-                    
-                    <h:panelGroup>
-                        <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" 
-                                includeViewParams="true" outcome="/admin/readers/create?faces-redirect=true">
-                            
-                            <f:param name="reader_id" value="#{c.id}"/>
+            <h:dataTable id="table" value="#{readerBean.list}" var="i" styleClass="table text-center">
+                <h:column>
+                    <f:facet name="header">#{adminMsg['reader.id']}</f:facet>
+                    #{i.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['reader.fullname']}</f:facet>
+                    #{i.fullName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['reader.email']}</f:facet>
+                    #{i.email}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['reader.address']}</f:facet>
+                    #{i.address}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['reader.phone']}</f:facet>
+                    #{i.phone}
+                </h:column>                
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:form style="display: inline-block;">
+                        <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/readers/create?faces-redirect=true">
+                                <f:param name="reader_id" value="#{i.id}"/>
                         </h:link>
-                        <h:form style="display: inline-block;">
-                            <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
-                                <f:ajax listener="#{readerBean.deleteReader(c)}" onerror="deleteError" onevent="deleteSuccess"/>
-                            </h:commandLink>
-                        </h:form>
-                    </h:panelGroup>
-                </c:forEach>
-                
-            </h:panelGrid>
-            
+                    
+                        <h:commandLink class="btn btn-danger ml-2" value="#{adminMsg['deleteBtn']}" action="#{readerBean.deleteReader(i)}">
+                            <f:ajax onerror="deleteError" onevent="deleteSuccess"/>
+                        </h:commandLink>
+                    </h:form>
+                </h:column>
+            </h:dataTable> 
+                        
         </ui:define>
         
     </ui:composition>

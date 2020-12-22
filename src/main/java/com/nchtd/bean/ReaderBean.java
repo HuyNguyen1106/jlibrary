@@ -7,6 +7,7 @@ package com.nchtd.bean;
 
 import com.nchtd.POJO.Reader;
 import com.nchtd.services.ReaderService;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Named;
@@ -14,6 +15,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.Pattern;
+import javax.xml.crypto.Data;
 
 /**
  *
@@ -42,7 +44,7 @@ public class ReaderBean {
                 .getExternalContext()
                 .getRequestParameterMap()
                 .get("reader_id");
-            if (readerId != null && !readerId.isEmpty()){    
+            if (readerId != null && !readerId.isEmpty()){
                 Reader reader = readerService.getReaderById(Integer.parseInt(readerId));
                 this.readId = reader.getId();
                 this.first = reader.getFirstname();
@@ -65,16 +67,19 @@ public class ReaderBean {
 //                .getRequestParameterMap()
 //                .get("reader_id");
         Reader c;
+        Date date = new Date();
         if (this.readId != null){
             c = readerService.getReaderById(this.readId);
         } else {
-            c = new Reader(); 
-        }         
+            c = new Reader();
+            c.setCreatedAt(date);
+        }
         c.setFirstname(this.first);
         c.setLastname(this.last);
         c.setEmail(this.email);
         c.setPhone(this.phone);
         c.setAddress(this.address);
+        c.setUpdatedAt(date);
         
         if(readerService.addOrSave(c) == true) {
             return "index?faces-redirect=true";
@@ -84,12 +89,22 @@ public class ReaderBean {
     }
     
     public String deleteReader (Reader reader) throws Exception{
-        reader.setDeletedAt(new Date());
-        if (readerService.addOrSave(reader) == true){
-            return "successful";
+        Date d = new Date();
+        reader.setDeletedAt(d);
+        reader.setUpdatedAt(d);
+        if (readerService.addOrSave(reader) == true){            
+            return "index?faces-redirect=true";
         }
         throw new Exception("Delete failed");
     }
+    
+//    public String getRowClasses() {
+//        StringBuilder sb = new StringBuilder();
+//        for (Data data : myData) {
+//            sb.append(data.hide ? 'hide,' : 'show,');
+//        }
+//        return sb.toString();
+//    }
     
     /**
      * @return the first
@@ -125,6 +140,8 @@ public class ReaderBean {
     public String getEmail() {
         return email;
     }
+    
+    
 
     /**
      * @param email the email to set

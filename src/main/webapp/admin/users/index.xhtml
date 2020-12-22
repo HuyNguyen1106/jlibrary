@@ -8,37 +8,48 @@
     <ui:composition template="../../layouts/admin.xhtml">
         <ui:define name="title">#{adminMsg["users.admin"]}</ui:define>
         <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
+            </f:metadata>
             <h2>#{adminMsg["users.admin"]}</h2>
             <!-- Create new user -->
             <h:link class="btn btn-outline-primary mb-2" outcome="/admin/users/create">#{adminMsg["users.create"]}</h:link>
-            
-            <h:panelGrid class="table text-center" id = "panel" columns = "5" border = "1" cellpadding = "10" cellspacing = "1">
-                <h:panelGroup>#{adminMsg["users.id"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["users.username"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["users.email"]}</h:panelGroup>
-                <h:panelGroup>#{adminMsg["users.role"]}</h:panelGroup>
-                <h:panelGroup></h:panelGroup>
-                <c:forEach items="#{userBean.list}" var="u">
-                    <h:panelGroup>
-                        <h:link class="text-primary" onclick="alert('show user detail modal')">#{u.id}</h:link>
-                    </h:panelGroup>                    
-                    <h:outputLabel value = "#{u.username}" />
-                    <h:outputLabel value = "#{u.email}" />
-                    <h:outputLabel value = "#{u.role.name}" />
-                    <h:panelGroup>
+            <h:dataTable value="#{userBean.list}" var="i" styleClass="table text-center">
+                <h:column>
+                    <f:facet name="header">#{adminMsg['users.id']}</f:facet>
+                    #{i.id}
+                </h:column>                
+                <h:column>
+                    <f:facet name="header">#{adminMsg['users.username']}</f:facet>
+                    #{i.username}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['users.email']}</f:facet>
+                    #{i.email}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['users.role']}</f:facet>
+                    #{i.role.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['users.active']}</f:facet>
+                    <h:outputText styleClass="#{userBean.getActiveColor(i)}" value="#{userBean.getActiveText(i)}">
+                        
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:form style="display: inline-block;">
                         <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/users/create?faces-redirect=true">
-                            <f:param name="user_id" value="#{u.id}"/>
+                                <f:param name="user_id" value="#{i.id}"/>
                         </h:link>
-                        <h:form style="display: inline-block;">
-                            <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
-                                <f:ajax listener="#{userBean.delete(u)}" onerror="deleteError" onevent="deleteSuccess"/>
-                            </h:commandLink>
-                        </h:form>
-                    </h:panelGroup>
-                </c:forEach>
-                
-            </h:panelGrid>
-            <!-- Modal -->
+                    
+                        <h:commandLink class="btn btn-danger ml-2" value="#{adminMsg['activeBtn']}" action="#{userBean.changeActive(i)}">
+                            <f:ajax onerror="deleteError" onevent="deleteSuccess"/>
+                        </h:commandLink>
+                    </h:form>
+                </h:column>
+            </h:dataTable>
             
         </ui:define>
     </ui:composition>

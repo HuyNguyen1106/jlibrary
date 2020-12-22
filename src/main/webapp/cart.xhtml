@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template = "layouts/base.xhtml">
+            <ui:define name = "title">J Library</ui:define>
+            
+            <ui:define name="content">
+                <!--<f:metadata>
+                    <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
+                </f:metadata>-->
+                <h1 class="text-center text-primary">#{adminMsg['cart.title']}</h1>
+                <h:messages></h:messages>
+                <c:if test="#{facesContext.externalContext.sessionMap.get('cart') != null}">
+                    <h:dataTable var="i" value="#{cartBean.carts}" styleClass="table text-center">
+                        <h:column>
+                            <f:facet name="header">#{adminMsg['books.id']}</f:facet>
+                            #{i['bookId']}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg['books.title']}</f:facet>
+                            #{i['bookTitle']}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg['books.price']}</f:facet>
+                            #{i['price']}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg['books.qty']}</f:facet>
+                            #{i['qty']}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:form>
+                                <h:commandButton styleClass="btn btn-info" value="#{adminMsg['cart.up']}"></h:commandButton>
+                                <h:commandButton styleClass="btn btn-warning" value="#{adminMsg['cart.down']}"></h:commandButton>
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>
+                    <hr/>
+                    <h:form styleClass="p-2">
+                        <div class="row">
+                            <div class="col-3"><strong>#{adminMsg["orders.reader"]}</strong></div>
+                            <div class="col-5">
+                                <h:selectOneMenu id="reader" styleClass="form-control" required="true" value="#{cartBean.reader}" converter="ReaderConverter" >
+                                    <f:selectItems value="#{readerBean.list}" var="j" 
+                                                   itemLabel="#{j.fullName} | #{j.id}"
+                                                   itemValue="#{j.id.toString()}"></f:selectItems>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="col-4"><h:outputText value="#{cartBean.reader.fullName}"></h:outputText></div>
+                        </div>
+
+                        <hr/>
+                    
+                        <h:commandButton styleClass="btn btn-lg btn-outline-primary float-right" value="#{adminMsg['submitBtn']}" action="#{cartBean.checkout()}">
+                            <f:ajax listener="#{cartBean.checkout()}" onerror="alert('checkout fail')"></f:ajax>
+                        </h:commandButton>
+                    </h:form>
+                </c:if>
+                <c:if test="#{facesContext.externalContext.sessionMap.get('cart') == null}">
+                    <h2 class="text-secondary">#{adminMsg["notFoundCart"]}</h2>
+                </c:if>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

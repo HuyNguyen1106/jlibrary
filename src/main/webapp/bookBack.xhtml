@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template = "layouts/base.xhtml">
+            <ui:define name = "title">J Library</ui:define>
+            <ui:define name="content">
+<!--                <f:metadata>
+                    <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
+                </f:metadata>-->
+                <div class="container">
+                    <h1>#{adminMsg["orders.undone"]}</h1>
+                    <h:dataTable var="item" value="#{orderBean.getOrders(true)}" styleClass="table">
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.id"]}</f:facet>
+                            #{item.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.user"]}</f:facet>
+                            #{item.userId.username}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.reader"]}</f:facet>
+                            #{item.reader.fullName}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.return"]}</f:facet>
+                            #{item.returnDate.toString()}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.extra"]}</f:facet>
+                            #{item.extraFee}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:form>
+                                <h:commandButton styleClass="btn btn-info" value="#{adminMsg['detailBtn']}"></h:commandButton>
+                                <h:commandButton styleClass="btn btn-success" value="#{adminMsg['returnBookBtn']}"></h:commandButton>
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>>
+                    
+                 
+                </div>
+                   
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

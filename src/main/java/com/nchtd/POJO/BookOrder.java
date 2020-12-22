@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BookOrder.findById", query = "SELECT b FROM BookOrder b WHERE b.id = :id"),
     @NamedQuery(name = "BookOrder.findByReturnDate", query = "SELECT b FROM BookOrder b WHERE b.returnDate = :returnDate"),
     @NamedQuery(name = "BookOrder.findByExtraFee", query = "SELECT b FROM BookOrder b WHERE b.extraFee = :extraFee"),
-    @NamedQuery(name = "BookOrder.findByReaderId", query = "SELECT b FROM BookOrder b WHERE b.readerId = :readerId"),
+    @NamedQuery(name = "BookOrder.findByReader", query = "SELECT b FROM BookOrder b WHERE b.reader = :reader"),
     @NamedQuery(name = "BookOrder.findByCreatedAt", query = "SELECT b FROM BookOrder b WHERE b.createdAt = :createdAt"),
     @NamedQuery(name = "BookOrder.findByUpdatedAt", query = "SELECT b FROM BookOrder b WHERE b.updatedAt = :updatedAt"),
     @NamedQuery(name = "BookOrder.findByDeletedAt", query = "SELECT b FROM BookOrder b WHERE b.deletedAt = :deletedAt")})
@@ -56,8 +56,7 @@ public class BookOrder implements Serializable {
     private Date returnDate;
     @Column(name = "extra_fee")
     private BigInteger extraFee;
-    @Column(name = "reader_id")
-    private Integer readerId;
+    
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -67,12 +66,15 @@ public class BookOrder implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
+    
     @OneToMany(mappedBy = "orderId")
     private Collection<OrderDetail> orderDetailCollection;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    
+    @JoinColumn(name = "reader_id", referencedColumnName = "id", nullable = true)
+    @ManyToOne(optional = false)
     private Reader reader;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
     @ManyToOne
     private User userId;
 
@@ -107,13 +109,7 @@ public class BookOrder implements Serializable {
         this.extraFee = extraFee;
     }
 
-    public Integer getReaderId() {
-        return readerId;
-    }
-
-    public void setReaderId(Integer readerId) {
-        this.readerId = readerId;
-    }
+    
 
     public Date getCreatedAt() {
         return createdAt;

@@ -7,7 +7,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="../../layouts/admin.xhtml">
         <ui:define name="title">#{adminMsg['reader.new']}</ui:define>
-        <ui:define name="content">            
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
+            </f:metadata>
             <h:form>
                 <div class="card">
                     <div class="card-header">#{adminMsg['reader.new']}</div>

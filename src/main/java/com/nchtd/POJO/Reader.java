@@ -19,7 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -82,7 +81,7 @@ public class Reader implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-    @OneToMany(mappedBy = "readerId")
+    @OneToMany(mappedBy = "reader")
     private Collection<BookOrder> bookOrderCollection;
 
     public Reader() {
@@ -120,6 +119,11 @@ public class Reader implements Serializable {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+    
+    public String getFullName() {
+        return this.firstname + " " + this.lastname;
+    }
+    
 
     public String getEmail() {
         return email;

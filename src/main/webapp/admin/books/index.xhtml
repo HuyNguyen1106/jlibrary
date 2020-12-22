@@ -6,43 +6,52 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="../../layouts/admin.xhtml">
-        <ui:define name="title">Book Management</ui:define>
+        <ui:define name="title">#{adminMsg['books.admin']}</ui:define>
         <ui:define name="content">
-            <h2>Book Management</h2>
-            <!-- Create new user -->
-            <h:link class="btn btn-outline-primary mb-2" outcome="/admin/books/create">Add book</h:link>
-            
-            <h:panelGrid class="table text-center" id = "panel" columns = "7" border = "1" cellpadding = "10" cellspacing = "1">
-                <h:panelGroup>ID</h:panelGroup>
-                <h:panelGroup>Title</h:panelGroup>
-                <h:panelGroup>Unit Price</h:panelGroup>
-                <h:panelGroup>Author</h:panelGroup>
-                <h:panelGroup>Release</h:panelGroup>
-                <h:panelGroup>Category</h:panelGroup>
-                <h:panelGroup></h:panelGroup>
-                <c:forEach items="#{bookBean.books}" var="i">
-                    <h:panelGroup>
-                        #{i.id}
-                    </h:panelGroup>                    
-                    <h:outputLabel value = "#{i.title}" />
-                    <h:outputLabel value = "#{i.unitPrice}" />
-                    <h:outputLabel value = "#{i.author}" />
-                    <h:outputLabel value = "#{i.releaseYear}" />
-                    <h:outputLabel value = "#{i.categoryId.title}" />
-                    <h:panelGroup>
+            <f:metadata>
+                <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
+            </f:metadata>
+            <h2>#{adminMsg['books.admin']}</h2>
+            <!-- Create new book -->
+            <h:link class="btn btn-outline-primary mb-2" outcome="/admin/books/create">#{adminMsg['books.create']}</h:link>
+            <h:dataTable value="#{bookBean.books}" var="i" styleClass="table text-center">
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.id']}</f:facet>
+                    #{i.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.title']}</f:facet>
+                    #{i.title}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.price']}</f:facet>
+                    #{i.unitPrice}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.author']}</f:facet>
+                    #{i.author}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.releaseYear']}</f:facet>
+                    #{i.releaseYear}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{adminMsg['books.category']}</f:facet>
+                    #{i.categoryId.title}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:form style="display: inline-block;">
                         <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/books/create?faces-redirect=true">
-                            <f:param name="book_id" value="#{i.id}"/>
+                                <f:param name="book_id" value="#{i.id}"/>
                         </h:link>
-                        <h:form style="display: inline-block;">
-                            <h:commandLink class="btn btn-danger" value="#{adminMsg['deleteBtn']}">
-                                <f:ajax />
-                            </h:commandLink>
-                        </h:form>
-                    </h:panelGroup>
-                </c:forEach>
-                
-            </h:panelGrid>
-            <!-- Modal -->
+                    
+                        <h:commandLink class="btn btn-danger ml-2" value="#{adminMsg['deleteBtn']}">
+                            <f:ajax onerror="deleteError" onevent="deleteSuccess"/>
+                        </h:commandLink>
+                    </h:form>
+                </h:column>
+            </h:dataTable>
             
         </ui:define>
     </ui:composition>

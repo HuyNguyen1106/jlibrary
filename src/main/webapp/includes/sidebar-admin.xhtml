@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <!-- Sidebar/menu -->
         <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top: 43px;" id="mySidebar"><br/>
@@ -10,7 +11,7 @@
               <img src="https://w3schools.com/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px"/>
             </div>
             <div class="w3-col s8 w3-bar">
-              <span>Welcome, <strong>Admin</strong></span><br/>
+                <span>Welcome, <strong>#{facesContext.externalContext.sessionMap.get("user").username}</strong></span><br/>
               <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
               <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
               <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
@@ -22,14 +23,18 @@
           </div>
           <div class="w3-bar-block">
             <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/roles/index"><i class="fas fa-flag"></i>  Roles</h:link>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/users/index"><i class="fas fa-users"></i>  Users</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/roles/index">
+                <i class="fas fa-flag"></i>  Roles
+            </h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/users/index">
+                <i class="fas fa-users"></i>  Users
+            </h:link>
             <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/categories/index"><i class="fas fa-bookmark"></i>  Categories</h:link>
             <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/books/index"><i class="fas fa-book fa-fw"></i>  Books</h:link>
             <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/readers/index"><i class="fas fa-book-reader"></i>  Readers</h:link>
             <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/orders/index"><i class="fas fa-receipt"></i>  Orders</h:link>            
             <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/index"><i class="fas fa-chart-bar"></i>  Charts</h:link><br></br><br></br><hr/>
-            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/index"><i class="fas fa-sign-out-alt"></i>  Logout</h:link>
+            <h:link class="w3-bar-item w3-button w3-padding" outcome="/admin/#{userBean.logout()}"><i class="fas fa-sign-out-alt"></i>  Logout</h:link>
           </div>
         </nav>
         <!-- Overlay effect when opening sidebar on small screens -->

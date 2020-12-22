@@ -41,7 +41,7 @@ CREATE TABLE `book` (
   PRIMARY KEY (`id`),
   KEY `category_id_idx` (`category_id`),
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,6 +50,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
+INSERT INTO `book` VALUES (3,'book 1','',100000,'author 1',1990,'2020-12-21 06:33:20','2020-12-21 06:33:20',1,3,0,0,'upload/Gray_book.png');
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,9 +100,10 @@ CREATE TABLE `order` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`),
-  CONSTRAINT `reader_id` FOREIGN KEY (`id`) REFERENCES `reader` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `reader_id_idx` (`reader_id`),
+  CONSTRAINT `reader_id` FOREIGN KEY (`reader_id`) REFERENCES `reader` (`id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +163,7 @@ CREATE TABLE `reader` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,6 +172,7 @@ CREATE TABLE `reader` (
 
 LOCK TABLES `reader` WRITE;
 /*!40000 ALTER TABLE `reader` DISABLE KEYS */;
+INSERT INTO `reader` VALUES (1,'Huy','Nguyen Chung','nguyenhuy182515@gmail.com','336 Phan Van Tri, Binh Thanh, HCM','0909182515',NULL,'2020-12-21 07:32:24',NULL),(2,'Định','Trương','dinh30121999@gmail.com','Thủ Đức, HCM','0909123123','2020-12-21 06:43:33','2020-12-21 07:32:24',NULL);
 /*!40000 ALTER TABLE `reader` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,7 +221,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `role_id_idx` (`role_id`),
   CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +230,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','nguyenhuy182515@gmail.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 08:36:16','2020-12-15 08:36:16',1,1),(2,'test','test@test.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 09:20:42','2020-12-15 09:20:42',1,2),(3,'test1','test1@test.com','$2y$10$a/YNu4cbTl70oMalkyEyKOs43HWTmY5oOk.s5iPrqaUPpl3jGzD7G','2020-12-15 09:29:25','2020-12-15 09:29:25',1,1),(4,'test create user','test3@gmail.com','123456',NULL,NULL,0,2),(6,'tester','test3@gmail.com.vn','123456',NULL,NULL,0,2);
+INSERT INTO `user` VALUES (1,'admin','nguyenhuy182515@gmail.com','e10adc3949ba59abbe56e057f20f883e','2020-12-15 08:36:16','2020-12-21 08:26:09',1,1),(2,'test','test@test.com','e10adc3949ba59abbe56e057f20f883e','2020-12-15 09:20:42','2020-12-21 08:26:09',1,2),(3,'test1','test1@test.com','e10adc3949ba59abbe56e057f20f883e','2020-12-15 09:29:25','2020-12-21 08:26:09',0,1),(4,'test create user','test3@gmail.com','e10adc3949ba59abbe56e057f20f883e',NULL,'2020-12-21 08:26:02',0,2),(6,'tester','test3@gmail.com.vn','e10adc3949ba59abbe56e057f20f883e',NULL,'2020-12-21 08:26:02',0,2),(7,'newuser','test4@gmail.com','e10adc3949ba59abbe56e057f20f883e',NULL,NULL,0,2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -240,4 +243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-21  9:18:08
+-- Dump completed on 2020-12-22 21:15:27

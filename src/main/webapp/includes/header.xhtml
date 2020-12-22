@@ -3,16 +3,19 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <body>
   <ui:composition>
     <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
         <h:link class="navbar-brand" outcome="index">J Library</h:link>
-        <a class="nav-link" href="#">Sign In</a>
-        <a class="nav-link" href="#">Logout</a>
-        
-        
+        <h:link outcome="cart">
+            Current Cart<span class="badge badge-primary">#{facesContext.externalContext.sessionMap.get("cart").get(0).get("totalQty")}</span>
+        </h:link>
+        <c:if test="#{facesContext.externalContext.sessionMap.get('user') != null}">
+            <h:link styleClass="nav-link" value="Logout" outcome="#{userBean.logout()}"></h:link>
+        </c:if>
       </nav>
   </ui:composition>
 </body>

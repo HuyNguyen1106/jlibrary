@@ -8,6 +8,9 @@
     <ui:composition template="../../layouts/admin.xhtml">
         <ui:define name="title">#{adminMsg["users.admin"]}</ui:define>
         <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
+            </f:metadata>
             <h2>#{adminMsg["users.admin"]}</h2>
             <!-- Create new user -->
             <h:link class="btn btn-outline-primary mb-2" outcome="/admin/users/create">#{adminMsg["users.create"]}</h:link>
