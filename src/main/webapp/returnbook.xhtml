@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template = "layouts/base.xhtml">
+            <ui:define name = "title">J Library</ui:define>
+            <ui:define name="content">
+<!--                <f:metadata>
+                    <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
+                </f:metadata>-->
+                <div class="">
+                    <h1>#{adminMsg["detail.admin"]}</h1>
+                    <c:if test="#{orderBean.details != null}">
+                        <h:dataTable var="item" value="#{orderBean.details}" styleClass="table text-center">
+                            <h:column>
+                                <f:facet name="header">#{adminMsg["detail.no"]}</f:facet>
+                                #{orderBean.details.indexOf(item) + 1}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{adminMsg["detail.book"]}</f:facet>
+                                #{item.book.title}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{adminMsg["detail.price"]}</f:facet>
+                                #{String.format("%,d",item.unitPrice)}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{adminMsg["detail.qty"]}</f:facet>
+                                #{item.quantiry}
+                            </h:column>
+                        </h:dataTable>
+                        <hr></hr>
+                        <h:form>
+                            <h:commandButton styleClass="btn btn-lg btn-success float-right" value="#{adminMsg['returnBookBtn']}"></h:commandButton>
+                        </h:form>
+                        
+                    </c:if>
+                 
+                </div>
+                   
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

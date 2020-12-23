@@ -6,20 +6,21 @@
 package com.nchtd.bean;
 
 import com.nchtd.POJO.Book;
-import com.nchtd.POJO.BookOrder;
-import com.nchtd.POJO.OrderDetail;
+import com.nchtd.POJO.Payment;
+import com.nchtd.POJO.PaymentDetail;
+import com.nchtd.POJO.PaymentDetailPK;
 import com.nchtd.POJO.Reader;
 import com.nchtd.POJO.User;
 import com.nchtd.services.BookService;
 import com.nchtd.services.OrderService;
 import com.nchtd.services.ReaderService;
 import com.nchtd.services.UserService;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
@@ -34,10 +35,9 @@ import javax.faces.context.FacesContext;
 @Named(value = "cartBean")
 @SessionScoped
 @ManagedBean
-public class CartBean {
+public class CartBean implements Serializable{
     private Reader reader;
-    private static final BookService bookService = new BookService();
-    private static final OrderService orderService = new OrderService();
+    
     /**
      * Creates a new instance of CartBean
      */
@@ -84,37 +84,7 @@ public class CartBean {
         return res;
     }
     
-    public String checkout() {
-        Map<Integer, Object> cart = (Map<Integer, Object>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cart");
-        if(cart != null) {
-            BookOrder o = new BookOrder();
-            Date date = new Date();
-            o.setCreatedAt(date);
-            o.setUpdatedAt(date);
-            User u = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-            
-            o.setUserId(u);
-            
-            o.setReader(this.reader);
-            List<OrderDetail> details = new ArrayList<>();
-            for (Object value : cart.values()) {
-                Map<String, Object> map = (Map<String, Object>) value;
-                Book b = bookService.getById((int) map.get("bookId"));
-                OrderDetail od = new OrderDetail();
-                od.setOrderId(o);
-                od.setBookId(b);
-                od.setQuantity((Short.parseShort(map.get("qty").toString())));
-                od.setUnitPrice((long) map.get("price"));
-                details.add(od);
-            }
-            if(orderService.saveOrder(o,details) == true) {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("cart");
-                return "index?faces-redirect=true"; 
-            }
-        }
-        
-        return "cart";
-    }
+    
 
     /**
      * @return the reader

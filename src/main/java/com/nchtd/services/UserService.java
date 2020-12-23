@@ -63,7 +63,7 @@ public class UserService {
             return u;
         }
         
-        if(u.getRole().getName().equals("ADMIN")) {
+        if(u.getRole() == 1) {
             return u;
         }
 
@@ -109,4 +109,11 @@ public class UserService {
         }
         return true;
     }
+    
+//    public int[] roleList() {
+//        int[] rs = new int[2];
+//        rs[1] = 1;//ADMIN
+//        rs[2] = 2;
+//        return rs;
+//    }
 }

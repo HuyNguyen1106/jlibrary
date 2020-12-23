@@ -6,11 +6,13 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +21,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Admin
  */
 @Entity
-@Table(name = "book")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Book.findAll", query = "SELECT b FROM Book b"),
@@ -46,24 +46,22 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Book.findByUpdatedAt", query = "SELECT b FROM Book b WHERE b.updatedAt = :updatedAt"),
     @NamedQuery(name = "Book.findByActive", query = "SELECT b FROM Book b WHERE b.active = :active"),
     @NamedQuery(name = "Book.findByAvailableCount", query = "SELECT b FROM Book b WHERE b.availableCount = :availableCount"),
-    @NamedQuery(name = "Book.findByTotalCount", query = "SELECT b FROM Book b WHERE b.totalCount = :totalCount")})
+    @NamedQuery(name = "Book.findByTotalCount", query = "SELECT b FROM Book b WHERE b.totalCount = :totalCount"),
+    @NamedQuery(name = "Book.findByImage", query = "SELECT b FROM Book b WHERE b.image = :image")})
 public class Book implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "title")
     private String title;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "description")
     private String description;
     @Basic(optional = false)
     @NotNull
@@ -72,7 +70,6 @@ public class Book implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 128)
-    @Column(name = "author")
     private String author;
     @Column(name = "release_year")
     private Integer releaseYear;
@@ -84,19 +81,18 @@ public class Book implements Serializable {
     private Date updatedAt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "active")
     private short active;
     @Column(name = "available_count")
     private Integer availableCount;
     @Column(name = "total_count")
     private Integer totalCount;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne
-    private Category categoryId;
-    @Column(name = "image")
+    @Size(max = 255)
     private String image;
-    @OneToMany(mappedBy = "bookId")
-    private Collection<OrderDetail> orderDetailCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "book", fetch = FetchType.EAGER)
+    private List<PaymentDetail> paymentDetailList;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category categoryId;
 
     public Book() {
     }
@@ -202,21 +198,29 @@ public class Book implements Serializable {
         this.totalCount = totalCount;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @XmlTransient
+    public List<PaymentDetail> getPaymentDetailList() {
+        return paymentDetailList;
+    }
+
+    public void setPaymentDetailList(List<PaymentDetail> paymentDetailList) {
+        this.paymentDetailList = paymentDetailList;
+    }
+
     public Category getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
-    }
-
-    @XmlTransient
-    public Collection<OrderDetail> getOrderDetailCollection() {
-        return orderDetailCollection;
-    }
-
-    public void setOrderDetailCollection(Collection<OrderDetail> orderDetailCollection) {
-        this.orderDetailCollection = orderDetailCollection;
     }
 
     @Override
@@ -241,21 +245,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(this.id);
-    }
-
-    /**
-     * @return the image
-     */
-    public String getImage() {
-        return image;
-    }
-
-    /**
-     * @param image the image to set
-     */
-    public void setImage(String image) {
-        this.image = image;
+        return "com.nchtd.POJO.Book[ id=" + id + " ]";
     }
     
 }

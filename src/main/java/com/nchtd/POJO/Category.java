@@ -6,18 +6,18 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Admin
  */
 @Entity
-@Table(name = "category")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
@@ -46,17 +45,14 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "title")
     private String title;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "description")
     private String description;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,10 +62,9 @@ public class Category implements Serializable {
     private Date updatedAt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "active")
     private short active;
-    @OneToMany(mappedBy = "categoryId")
-    private Collection<Book> bookCollection;
+    @OneToMany(mappedBy = "categoryId", fetch = FetchType.EAGER)
+    private List<Book> bookList;
 
     public Category() {
     }
@@ -134,12 +129,12 @@ public class Category implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Book> getBookCollection() {
-        return bookCollection;
+    public List<Book> getBookList() {
+        return bookList;
     }
 
-    public void setBookCollection(Collection<Book> bookCollection) {
-        this.bookCollection = bookCollection;
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
     }
 
     @Override
@@ -164,7 +159,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(this.id);
+        return "com.nchtd.POJO.Category[ id=" + id + " ]";
     }
     
 }

@@ -5,18 +5,20 @@
  */
 package com.nchtd.services;
 
-import com.nchtd.POJO.BookOrder;
-import com.nchtd.POJO.OrderDetail;
+import com.nchtd.POJO.Payment;
+import com.nchtd.POJO.PaymentDetail;
+import com.nchtd.POJO.PaymentDetailPK;
 import com.nchtd.config.HibernateUtils;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jboss.logging.Logger;
 
 /**
  *
@@ -25,45 +27,41 @@ import org.jboss.logging.Logger;
 public class OrderService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public List<BookOrder> getAll(boolean isNotDoneFilter) {
+    public List<Payment> getAll() {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery query = builder.createQuery();
-            Root<BookOrder> root = query.from(BookOrder.class);
+            CriteriaQuery<Payment> query = builder.createQuery(Payment.class);
+            Root<Payment> root = query.from(Payment.class);
             
-            query = query.select(root);
+            query = query.select(root).orderBy(builder.desc(root.get("returnDate")));
             
-            if(isNotDoneFilter) {
-                query.where(builder.or(builder.isNull(root.get("returnDate").as(Date.class)), builder.greaterThan(root.get("returnDate").as(Date.class), new Date())));
+            Query q = session.createQuery(query);
+            
+            return q.getResultList();
+        }
+    }
+    
+    public List<PaymentDetail> getDetailsById(int id) {
+        if (id > 0) {
+            try (Session session = FACTORY.openSession()) {
+                Payment p = session.get(Payment.class, id);
+
+                return p.getPaymentDetailList();
             }
-            
-            Query q = session.createQuery(query);
-            
-            return q.getResultList();
         }
+        return null;
     }
     
-    public List<OrderDetail> getDetailsById(int id) {
-        try (Session session = FACTORY.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery query = builder.createQuery();
-            Root<OrderDetail> root = query.from(OrderDetail.class);
-        
-            query = query.select(root).where(builder.equal(root.get("orderId"), id));     
-            
-            Query q = session.createQuery(query);
-            
-            return q.getResultList();
-        }
-    }
-    
-    public boolean saveOrder(BookOrder order, List<OrderDetail> details) {
+    public boolean saveOrder(Payment order, List<PaymentDetail> details) {
         try (Session session = FACTORY.openSession()) {
             try {
                 session.getTransaction().begin();
-//                session.save(order);
                 session.save(order);
-                for(OrderDetail od : details) {
+                for(PaymentDetail od : details) {
+                    PaymentDetailPK pk = new PaymentDetailPK();
+                    pk.setBookId(od.getBook().getId());
+                    pk.setPaymentId(order.getId());
+                    od.setPaymentDetailPK(pk);
                     session.save(od);
                 }
                 session.getTransaction().commit();
@@ -73,7 +71,7 @@ public class OrderService {
                 return false;
             }
             
-            return false;
+            return true;
         }
     }
 }

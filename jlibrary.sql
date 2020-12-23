@@ -83,13 +83,13 @@ INSERT INTO `category` VALUES (1,'Education','Sách giáo khoa','2020-12-05 07:4
 UNLOCK TABLES;
 
 --
--- Table structure for table `order`
+-- Table structure for table `payment`
 --
 
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `payment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order` (
+CREATE TABLE `payment` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `return_date` date DEFAULT NULL,
   `extra_fee` bigint unsigned DEFAULT '0',
@@ -103,46 +103,46 @@ CREATE TABLE `order` (
   KEY `reader_id_idx` (`reader_id`),
   CONSTRAINT `reader_id` FOREIGN KEY (`reader_id`) REFERENCES `reader` (`id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order`
+-- Dumping data for table `payment`
 --
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (10,NULL,NULL,1,1,'2020-12-23 09:25:40','2020-12-23 09:34:15',NULL),(11,NULL,NULL,1,2,'2020-12-23 09:51:49','2020-12-23 09:52:51',NULL),(12,NULL,NULL,NULL,NULL,'2020-12-23 09:53:23','2020-12-23 09:53:23',NULL),(13,NULL,NULL,NULL,NULL,'2020-12-23 10:03:43','2020-12-23 10:03:43',NULL),(14,NULL,NULL,NULL,NULL,'2020-12-23 10:06:50','2020-12-23 10:06:50',NULL);
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `order_detail`
+-- Table structure for table `payment_detail`
 --
 
-DROP TABLE IF EXISTS `order_detail`;
+DROP TABLE IF EXISTS `payment_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_detail` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `unit_price` bigint NOT NULL DEFAULT '10000',
-  `quantity` smallint NOT NULL,
-  `order_id` int unsigned DEFAULT NULL,
-  `book_id` int unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_id_idx` (`order_id`),
+CREATE TABLE `payment_detail` (
+  `payment_id` int unsigned NOT NULL,
+  `book_id` int unsigned NOT NULL,
+  `unit_price` decimal(10,0) NOT NULL,
+  `quantiry` int NOT NULL,
+  PRIMARY KEY (`payment_id`,`book_id`),
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `order_id` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `payment_id` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order_detail`
+-- Dumping data for table `payment_detail`
 --
 
-LOCK TABLES `order_detail` WRITE;
-/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
+LOCK TABLES `payment_detail` WRITE;
+/*!40000 ALTER TABLE `payment_detail` DISABLE KEYS */;
+INSERT INTO `payment_detail` VALUES (10,3,100000,2),(11,3,100000,1),(12,3,100000,1),(13,3,100000,2),(14,3,100000,1);
+/*!40000 ALTER TABLE `payment_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -177,31 +177,6 @@ INSERT INTO `reader` VALUES (1,'Huy','Nguyen Chung','nguyenhuy182515@gmail.com',
 UNLOCK TABLES;
 
 --
--- Table structure for table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `role` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `active` tinyint DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `role`
---
-
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'ADMIN',1),(2,'REGULAR',1);
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -216,11 +191,9 @@ CREATE TABLE `user` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` tinyint NOT NULL DEFAULT '1',
-  `role_id` int unsigned NOT NULL DEFAULT '2',
+  `role` int unsigned NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
-  KEY `role_id_idx` (`role_id`),
-  CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -243,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-22 21:15:27
+-- Dump completed on 2020-12-23 17:14:24

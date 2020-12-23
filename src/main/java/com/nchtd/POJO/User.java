@@ -6,20 +6,18 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -32,7 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Admin
  */
 @Entity
-@Table(name = "user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -42,30 +39,27 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByCreatedAt", query = "SELECT u FROM User u WHERE u.createdAt = :createdAt"),
     @NamedQuery(name = "User.findByUpdatedAt", query = "SELECT u FROM User u WHERE u.updatedAt = :updatedAt"),
-    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active")})
+    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
+    @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
-    @Column(name = "username")
     private String username;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "email")
     private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 128)
-    @Column(name = "password")
     private String password;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -75,13 +69,12 @@ public class User implements Serializable {
     private Date updatedAt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "active")
     private short active;
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Role role;
-    @OneToMany(mappedBy = "userId")
-    private Collection<BookOrder> bookOrderCollection;
+    @Basic(optional = false)
+    @NotNull
+    private int role;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    private List<Payment> paymentList;
 
     public User() {
     }
@@ -90,12 +83,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String email, String password, short active) {
+    public User(Integer id, String username, String email, String password, short active, int role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.active = active;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -154,21 +148,21 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public Role getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
     @XmlTransient
-    public Collection<BookOrder> getBookOrderCollection() {
-        return bookOrderCollection;
+    public List<Payment> getPaymentList() {
+        return paymentList;
     }
 
-    public void setBookOrderCollection(Collection<BookOrder> bookOrderCollection) {
-        this.bookOrderCollection = bookOrderCollection;
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
     }
 
     @Override
@@ -193,7 +187,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(this.id);
+        return "com.nchtd.POJO.User[ id=" + id + " ]";
     }
     
 }

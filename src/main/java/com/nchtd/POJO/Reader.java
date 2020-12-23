@@ -6,10 +6,9 @@
 package com.nchtd.POJO;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,20 +18,18 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Admin
  */
 @Entity
-@Table(name = "reader")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Reader.findAll", query = "SELECT r FROM Reader r"),
@@ -51,26 +48,20 @@ public class Reader implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
-    @Column(name = "firstname")
     private String firstname;
     @Size(max = 45)
-    @Column(name = "lastname")
     private String lastname;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 128)
-    @Column(name = "email")
     private String email;
     @Size(max = 255)
-    @Column(name = "address")
     private String address;
-    @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Size(max = 11)
-    @Column(name = "phone")
     private String phone;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -81,8 +72,8 @@ public class Reader implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-    @OneToMany(mappedBy = "reader")
-    private Collection<BookOrder> bookOrderCollection;
+    @OneToMany(mappedBy = "readerId", fetch = FetchType.EAGER)
+    private List<Payment> paymentList;
 
     public Reader() {
     }
@@ -123,7 +114,6 @@ public class Reader implements Serializable {
     public String getFullName() {
         return this.firstname + " " + this.lastname;
     }
-    
 
     public String getEmail() {
         return email;
@@ -173,6 +163,15 @@ public class Reader implements Serializable {
         this.deletedAt = deletedAt;
     }
 
+    @XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -195,21 +194,7 @@ public class Reader implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(this.id);
-    }
-
-    /**
-     * @return the bookOrderCollection
-     */
-    public Collection<BookOrder> getBookOrderCollection() {
-        return bookOrderCollection;
-    }
-
-    /**
-     * @param bookOrderCollection the bookOrderCollection to set
-     */
-    public void setBookOrderCollection(Collection<BookOrder> bookOrderCollection) {
-        this.bookOrderCollection = bookOrderCollection;
+        return "com.nchtd.POJO.Reader[ id=" + id + " ]";
     }
     
 }

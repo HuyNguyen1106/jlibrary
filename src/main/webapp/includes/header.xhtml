@@ -9,9 +9,15 @@
   <ui:composition>
     <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-        <h:link class="navbar-brand" outcome="index">J Library</h:link>
-        <h:link outcome="cart">
-            Current Cart<span class="badge badge-primary">#{facesContext.externalContext.sessionMap.get("cart").get(0).get("totalQty")}</span>
+        <h:link styleClass="navbar-brand" outcome="index">J Library</h:link>
+        <h:link styleClass="nav-link" outcome="bookback">
+            #{adminMsg["link.order"]}
+        </h:link>
+        <h:link styleClass="nav-link" outcome="cart">
+            #{adminMsg["link.cart"]}
+            <c:if test="#{facesContext.externalContext.sessionMap.get('cart') != null}">
+                <span class="badge badge-primary"> </span>
+            </c:if>
         </h:link>
         <c:if test="#{facesContext.externalContext.sessionMap.get('user') != null}">
             <h:link styleClass="nav-link" value="Logout" outcome="#{userBean.logout()}"></h:link>

@@ -41,8 +41,9 @@
                               <h:outputLabel value="#{adminMsg['users.role']}" styleClass="input-group-text"/>
                             </div>
 
-                            <h:selectOneMenu id="role" required="true" styleClass="form-control" value="#{userBean.role}" converter="UserRoleConverter">
-                                <f:selectItems var="r" value="#{roleBean.roles}" itemLabel="#{r.name}" itemValue="#{r.toString()}"/>
+                            <h:selectOneMenu id="role" required="true" styleClass="form-control" value="#{userBean.role}">
+                                <f:selectItem itemValue="1" itemLabel="ADMIN"></f:selectItem>
+                                <f:selectItem itemValue="2" itemLabel="REGULAR"></f:selectItem>
                             </h:selectOneMenu>
 
                         </h:panelGroup>

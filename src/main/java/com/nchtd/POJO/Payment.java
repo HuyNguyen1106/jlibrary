@@ -7,11 +7,13 @@ package com.nchtd.POJO;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +22,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,31 +32,27 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Admin
  */
 @Entity
-@Table(name = "order")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "BookOrder.findAll", query = "SELECT b FROM BookOrder b"),
-    @NamedQuery(name = "BookOrder.findById", query = "SELECT b FROM BookOrder b WHERE b.id = :id"),
-    @NamedQuery(name = "BookOrder.findByReturnDate", query = "SELECT b FROM BookOrder b WHERE b.returnDate = :returnDate"),
-    @NamedQuery(name = "BookOrder.findByExtraFee", query = "SELECT b FROM BookOrder b WHERE b.extraFee = :extraFee"),
-    @NamedQuery(name = "BookOrder.findByReader", query = "SELECT b FROM BookOrder b WHERE b.reader = :reader"),
-    @NamedQuery(name = "BookOrder.findByCreatedAt", query = "SELECT b FROM BookOrder b WHERE b.createdAt = :createdAt"),
-    @NamedQuery(name = "BookOrder.findByUpdatedAt", query = "SELECT b FROM BookOrder b WHERE b.updatedAt = :updatedAt"),
-    @NamedQuery(name = "BookOrder.findByDeletedAt", query = "SELECT b FROM BookOrder b WHERE b.deletedAt = :deletedAt")})
-public class BookOrder implements Serializable {
+    @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
+    @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
+    @NamedQuery(name = "Payment.findByReturnDate", query = "SELECT p FROM Payment p WHERE p.returnDate = :returnDate"),
+    @NamedQuery(name = "Payment.findByExtraFee", query = "SELECT p FROM Payment p WHERE p.extraFee = :extraFee"),
+    @NamedQuery(name = "Payment.findByCreatedAt", query = "SELECT p FROM Payment p WHERE p.createdAt = :createdAt"),
+    @NamedQuery(name = "Payment.findByUpdatedAt", query = "SELECT p FROM Payment p WHERE p.updatedAt = :updatedAt"),
+    @NamedQuery(name = "Payment.findByDeletedAt", query = "SELECT p FROM Payment p WHERE p.deletedAt = :deletedAt")})
+public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Column(name = "return_date")
     @Temporal(TemporalType.DATE)
     private Date returnDate;
     @Column(name = "extra_fee")
     private BigInteger extraFee;
-    
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -66,22 +62,19 @@ public class BookOrder implements Serializable {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-    
-    @OneToMany(mappedBy = "orderId")
-    private Collection<OrderDetail> orderDetailCollection;
-    
-    @JoinColumn(name = "reader_id", referencedColumnName = "id", nullable = true)
-    @ManyToOne(optional = false)
-    private Reader reader;
-    
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
-    @ManyToOne
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payment", fetch = FetchType.EAGER)
+    private List<PaymentDetail> paymentDetailList;
+    @JoinColumn(name = "reader_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Reader readerId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userId;
 
-    public BookOrder() {
+    public Payment() {
     }
 
-    public BookOrder(Integer id) {
+    public Payment(Integer id) {
         this.id = id;
     }
 
@@ -109,8 +102,6 @@ public class BookOrder implements Serializable {
         this.extraFee = extraFee;
     }
 
-    
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -136,20 +127,20 @@ public class BookOrder implements Serializable {
     }
 
     @XmlTransient
-    public Collection<OrderDetail> getOrderDetailCollection() {
-        return orderDetailCollection;
+    public List<PaymentDetail> getPaymentDetailList() {
+        return paymentDetailList;
     }
 
-    public void setOrderDetailCollection(Collection<OrderDetail> orderDetailCollection) {
-        this.orderDetailCollection = orderDetailCollection;
+    public void setPaymentDetailList(List<PaymentDetail> paymentDetailList) {
+        this.paymentDetailList = paymentDetailList;
     }
 
-    public Reader getReader() {
-        return reader;
+    public Reader getReaderId() {
+        return readerId;
     }
 
-    public void setReader(Reader reader) {
-        this.reader = reader;
+    public void setReaderId(Reader readerId) {
+        this.readerId = readerId;
     }
 
     public User getUserId() {
@@ -170,10 +161,10 @@ public class BookOrder implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BookOrder)) {
+        if (!(object instanceof Payment)) {
             return false;
         }
-        BookOrder other = (BookOrder) object;
+        Payment other = (Payment) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -182,7 +173,7 @@ public class BookOrder implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(this.id);
+        return "com.nchtd.POJO.Payment[ id=" + id + " ]";
     }
     
 }

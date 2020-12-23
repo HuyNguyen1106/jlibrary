@@ -12,9 +12,9 @@
 <!--                <f:metadata>
                     <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
                 </f:metadata>-->
-                <div class="container">
-                    <h1>#{adminMsg["orders.undone"]}</h1>
-                    <h:dataTable var="item" value="#{orderBean.getOrders(true)}" styleClass="table">
+                <div class="">
+                    <h1>#{adminMsg["orders.title"]}</h1>
+                    <h:dataTable var="item" value="#{orderBean.orders}" styleClass="table text-center">
                         <h:column>
                             <f:facet name="header">#{adminMsg["orders.id"]}</f:facet>
                             #{item.id}
@@ -25,7 +25,11 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{adminMsg["orders.reader"]}</f:facet>
-                            #{item.reader.fullName}
+                            #{item.readerId.fullName}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{adminMsg["orders.createdAt"]}</f:facet>
+                            #{item.createdAt.toString()}
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{adminMsg["orders.return"]}</f:facet>
@@ -37,13 +41,12 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header"></f:facet>
-                            <h:form>
-                                <h:commandButton styleClass="btn btn-info" value="#{adminMsg['detailBtn']}"></h:commandButton>
-                                <h:commandButton styleClass="btn btn-success" value="#{adminMsg['returnBookBtn']}"></h:commandButton>
-                            </h:form>
+                            <h:link class="btn btn-info" value="#{adminMsg['detailBtn']}" includeViewParams="true" outcome="returnbook?faces-redirect=true">
+                                <f:param name="order_id" value="#{item.id}"/>
+                            </h:link>
                         </h:column>
-                    </h:dataTable>>
-                    
+                    </h:dataTable>
+                     
                  
                 </div>
                    

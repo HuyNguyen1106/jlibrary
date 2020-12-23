@@ -27,7 +27,7 @@
                     </h:panelGroup>                    
                     <h:outputLabel value = "#{u.username}" />
                     <h:outputLabel value = "#{u.email}" />
-                    <h:outputLabel value = "#{u.role.name}" />
+                    <h:outputLabel value = "#{userBean.getRoleText(u.role)}" />
                     <h:panelGroup>
                         <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/users/create?faces-redirect=true">
                             <f:param name="user_id" value="#{u.id}"/>

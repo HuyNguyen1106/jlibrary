@@ -5,13 +5,17 @@
  */
 package com.nchtd.bean;
 
-import com.nchtd.POJO.Role;
 import com.nchtd.POJO.User;
 import com.nchtd.services.UserService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -19,15 +23,15 @@ import javax.faces.context.FacesContext;
  * @author Admin
  */
 @Named(value = "userBean")
-@RequestScoped
+@SessionScoped
 @ManagedBean
-public class UserBean {
+public class UserBean implements Serializable{
     private final static UserService userService = new UserService();
     private int userId;
     private String username;
     private String password;
     private String email;
-    private Role role;
+    private int role;
 
     /**
      * Creates a new instance of UserBean
@@ -46,7 +50,7 @@ public class UserBean {
         if(this.checkAuth() == null) {
             User u = (User) FacesContext.getCurrentInstance()
                         .getExternalContext().getSessionMap().get("user");
-            if(u.getRole().getName().equals("ADMIN")) {
+            if(u.getRole() == 1) {
                 return null;
             }
         }
@@ -63,7 +67,7 @@ public class UserBean {
     public String checkAdmin() {
         if(this.checkLogin() != null) {
             User u = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-            if(u.getRole().getName().equals("ADMIN")) {
+            if(u.getRole() == 1) {
                 return "index?faces-redirect=true";
             }
         }
@@ -97,6 +101,28 @@ public class UserBean {
     public List<User> getList() {
         return userService.getAll();
     }
+    
+    public String getRoleText(int role) {
+        String rs = "";
+        switch(role) {
+            case 1:
+                rs = "ADMIN";
+                break;
+            case 2:
+                rs = "REGULAR";
+                break;
+        }
+        return rs;
+    }
+    
+//    public List<String> getRoleList() {
+//        
+//        List<String> list = new ArrayList<>();
+//        int[] roles = userService.roleList();
+//        list.add(roles[1], "ADMIN");
+//        list.add(roles[2], "REGULAR");
+//        return list;
+//    }
     
     public String addUser() {
         User u = new User();
@@ -204,14 +230,14 @@ public class UserBean {
     /**
      * @return the role
      */
-    public Role getRole() {
+    public int getRole() {
         return role;
     }
 
     /**
      * @param role the role to set
      */
-    public void setRole(Role role) {
+    public void setRole(int role) {
         this.role = role;
     }
 }
