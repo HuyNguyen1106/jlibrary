@@ -42,7 +42,7 @@ public class HibernateUtils {
             properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
             properties.put(Environment.URL, "jdbc:mysql://localhost/jlibrary"); // database: jlibrary
             properties.put(Environment.USER, "root"); //username
-            properties.put(Environment.PASS, "3012"); //password
+            properties.put(Environment.PASS, "root"); //password
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(properties).build();

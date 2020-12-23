@@ -3,15 +3,20 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <body>
   <ui:composition>
     <!-- Navigation bar -->
-    <nav class="navbar navbar-light bg-light">
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">#{adminMsg["link.search"]}</button>
-        </form>
+    <nav class="navbar navbar-light bg-light pl-10">
+        
+        <h:form styleClass="form-inline">
+            <h:inputText class="form-control mr-sm-2" value="#{bookBean.keyword}"/>
+            <h:link includeViewParams="true" styleClass="btn btn-outline-success my-2 my-sm-0" outcome="index?faces-redirect=true" value="#{adminMsg['link.search']}">
+<!--                <f:param name="keyword" value="#{bookBean.keyword}"/>-->
+            </h:link>
+        </h:form>
+        
     </nav>
   </ui:composition>
 </body>

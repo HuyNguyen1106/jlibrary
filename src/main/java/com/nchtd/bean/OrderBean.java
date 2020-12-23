@@ -13,6 +13,7 @@ import com.nchtd.POJO.Reader;
 import com.nchtd.POJO.User;
 import com.nchtd.services.BookService;
 import com.nchtd.services.OrderService;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,28 +33,28 @@ import javax.faces.context.FacesContext;
 public class OrderBean {
     private Reader reader;
     private int orderId;
+    private BigInteger extra;
     private static final BookService bookService = new BookService();
     private static final OrderService service = new OrderService();
-    private int qty;
-    private long price;
-    private Book book;
-    private Payment payment;
     /**
      * Creates a new instance of OrderBean
      */
     public OrderBean() {
-        String id = FacesContext.getCurrentInstance().getExternalContext().getInitParameterMap().get("order_id");
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("order_id");
         if(id != null && !id.isEmpty()) {
             this.orderId = Integer.parseInt(id);
         }
     }
     
     public List<Payment> getOrders() {
-        return service.getAll();
+        return service.getAll(false);
+    }
+    public List<Payment> getUndoneOrders() {
+        return service.getAll(true);
     }
     
-    public List<PaymentDetail> getDetails() {
-        return service.getDetailsById(this.orderId);
+    public Payment getDetails() {
+        return service.getById(this.orderId);
     }
     
     public String saveOrder() {
@@ -89,8 +90,21 @@ public class OrderBean {
         return "cart";
     }
     
-    public String end(Payment order) {
-        return "";
+    public String updateOrder() {
+        try {
+            Payment p = service.getById(this.orderId);
+            if(p == null) throw new Exception("payment not found");
+            p.setReturnDate(new Date());
+            p.setExtraFee(this.extra);
+            if(service.saveOrder(p, null) == true) {
+                return "bookback?faces-redirect=true";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+        
+        return "index";
     }
 
     /**
@@ -119,5 +133,19 @@ public class OrderBean {
      */
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    /**
+     * @return the extra
+     */
+    public BigInteger getExtra() {
+        return extra;
+    }
+
+    /**
+     * @param extra the extra to set
+     */
+    public void setExtra(BigInteger extra) {
+        this.extra = extra;
     }
 }

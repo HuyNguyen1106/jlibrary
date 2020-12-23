@@ -13,30 +13,51 @@
                     <f:viewAction action="#{userBean.checkAuth()}"></f:viewAction>
                 </f:metadata>-->
                 <div class="">
-                    <h1>#{adminMsg["detail.admin"]}</h1>
+                    
                     <c:if test="#{orderBean.details != null}">
-                        <h:dataTable var="item" value="#{orderBean.details}" styleClass="table text-center">
-                            <h:column>
-                                <f:facet name="header">#{adminMsg["detail.no"]}</f:facet>
-                                #{orderBean.details.indexOf(item) + 1}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">#{adminMsg["detail.book"]}</f:facet>
-                                #{item.book.title}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">#{adminMsg["detail.price"]}</f:facet>
-                                #{String.format("%,d",item.unitPrice)}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">#{adminMsg["detail.qty"]}</f:facet>
-                                #{item.quantiry}
-                            </h:column>
-                        </h:dataTable>
-                        <hr></hr>
-                        <h:form>
-                            <h:commandButton styleClass="btn btn-lg btn-success float-right" value="#{adminMsg['returnBookBtn']}"></h:commandButton>
-                        </h:form>
+                        
+                            <h1>#{adminMsg["detail.admin"]}: #{orderBean.details.id}</h1>
+                            <div class="row">
+                                <div class="col-md-2"><b>#{adminMsg["orders.user"]}</b></div>
+                                <div class="col-md-10">#{orderBean.details.userId.username}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"><b>#{adminMsg["orders.reader"]}</b></div>
+                                <div class="col-md-10">#{orderBean.details.readerId.fullName}</div>
+                            </div>
+                            <br></br>
+                            <h:dataTable var="item" value="#{orderBean.details.paymentDetailList}" styleClass="table text-center">
+                                <h:column>
+                                    <f:facet name="header">#{adminMsg["detail.no"]}</f:facet>
+                                    #{orderBean.details.paymentDetailList.indexOf(item) + 1}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">#{adminMsg["detail.book"]}</f:facet>
+                                    #{item.book.title}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">#{adminMsg["detail.price"]}</f:facet>
+                                    #{item.unitPrice}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">#{adminMsg["detail.qty"]}</f:facet>
+                                    #{item.quantiry}
+                                </h:column>
+                            </h:dataTable>
+                            <hr></hr>
+                            <h:form onsubmit="#{orderBean.updateOrder()}">
+                                <div class="row form-group">
+                                    <div class="col-md-2 text-center">
+                                        #{adminMsg["orders.extra"]}
+                                    </div>
+
+                                    <h:inputText id="extra" required="true" value="#{orderBean.extra}" styleClass="col-md-3 form-control"/>
+                                    <h:message for="extra" styleClass="text-danger"/>
+                                </div>
+                                <h:link styleClass="btn btn-lg btn-outline-secondary" outcome="bookback">#{adminMsg['backBtn']}</h:link>
+                                <h:commandButton styleClass="btn btn-lg btn-success float-right" type="submit" value="#{adminMsg['returnBookBtn']}">
+                                </h:commandButton>
+                            </h:form>
                         
                     </c:if>
                  

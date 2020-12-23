@@ -23,7 +23,7 @@ import org.hibernate.SessionFactory;
 public class BookService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public List<Book> getAll(Category cate) {
+    public List<Book> getAll(Category cate, String keyword) {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Book> query = builder.createQuery(Book.class);
@@ -32,6 +32,9 @@ public class BookService {
             query = query.select(root).where(builder.equal(root.get("active"), 1));
             if (cate != null){
                 query.where(builder.equal(root.get("categoryId").as(Category.class), cate));
+            }
+            if(keyword != null && !keyword.isEmpty()){
+                query.where(builder.or(builder.like(root.get("title").as(String.class), keyword), builder.like(root.get("author").as(String.class), keyword)));
             }
             Query q = session.createQuery(query);
             

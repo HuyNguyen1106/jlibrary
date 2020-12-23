@@ -10,15 +10,48 @@
             <ui:define name = "title">Dashboard</ui:define>
             <ui:define name = "content">
                 <!-- !PAGE CONTENT! -->
-                <f:metadata>
+<!--                <f:metadata>
                     <f:viewAction action="#{userBean.checkAdminAuth()}"></f:viewAction>
-                </f:metadata>
+                </f:metadata>-->
 
                   <!-- Header -->
                   <header class="w3-container" style="padding-top:22px">
                     <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
                   </header>
-
+                  <div class="w3-row-padding w3-margin-bottom">
+                      <h:form>
+                          <div class="row">
+                              <div class="col-md-1">Month</div>
+                              <div class="col-md-1">
+                                  <h:selectOneMenu value="#{dataBean.month}">
+                                      <f:selectItem itemLabel="1" itemValue="1"/>
+                                      <f:selectItem itemLabel="2" itemValue="2"/>
+                                      <f:selectItem itemLabel="3" itemValue="3"/>
+                                      
+                                      <f:selectItem itemLabel="4" itemValue="4"/>
+                                      <f:selectItem itemLabel="5" itemValue="5"/>
+                                      <f:selectItem itemLabel="6" itemValue="6"/>
+                                      <f:selectItem itemLabel="7" itemValue="7"/>
+                                      <f:selectItem itemLabel="8" itemValue="8"/>
+                                      <f:selectItem itemLabel="9" itemValue="9"/>
+                                      <f:selectItem itemLabel="10" itemValue="10"/>                                      
+                                      <f:selectItem itemLabel="11" itemValue="11"/>
+                                      <f:selectItem itemLabel="12" itemValue="12"/>
+                                  </h:selectOneMenu>
+                              </div>
+                              <div class="col-md-1">Year</div>
+                              <div class="col-md-3">
+                                  <h:inputText value="#{dataBean.year}"></h:inputText>
+                              </div>
+                              <div class="col-md-1">Income</div>
+                              <div class="col-md-2">
+                                  <h:outputText value="#{dataBean.income}"></h:outputText>
+                              </div>
+                              <h:commandButton styleClass="btn btn-info" action="#{dataBean.calData()}" value="Calculate"></h:commandButton>
+                          </div>
+                          
+                      </h:form>
+                  </div>
                   <div class="w3-row-padding w3-margin-bottom">
                     <div class="w3-quarter">
                       <div class="w3-container w3-red w3-padding-16">

@@ -14,7 +14,7 @@
                 </f:metadata>-->
                 <div class="">
                     <h1>#{adminMsg["orders.title"]}</h1>
-                    <h:dataTable var="item" value="#{orderBean.orders}" styleClass="table text-center">
+                    <h:dataTable var="item" value="#{orderBean.undoneOrders}" styleClass="table text-center">
                         <h:column>
                             <f:facet name="header">#{adminMsg["orders.id"]}</f:facet>
                             #{item.id}

@@ -41,7 +41,7 @@ public class BookBean {
     private Integer releaseYear;
     private Part imageFile;
     private Category cateId;
-    
+    private String keyword;
     
     /**
      * Creates a new instance of BookBean
@@ -129,7 +129,7 @@ public class BookBean {
         throw new Exception("Delete failed");
     }
     public List<Book> getBooks() {
-        return bookService.getAll(this.cateId);
+        return bookService.getAll(this.cateId, this.keyword);
     }
 
     /**
@@ -256,5 +256,19 @@ public class BookBean {
      */
     public void setBkId(Integer bkId) {
         this.bkId = bkId;
+    }
+
+    /**
+     * @return the keyword
+     */
+    public String getKeyword() {
+        return keyword;
+    }
+
+    /**
+     * @param keyword the keyword to set
+     */
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

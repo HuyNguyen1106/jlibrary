@@ -173,7 +173,7 @@ public class Payment implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.Payment[ id=" + id + " ]";
+        return String.valueOf(id);
     }
     
 }

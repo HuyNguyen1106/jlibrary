@@ -42,3 +42,7 @@ a:hover {
 .fullw {
     width: 100%;
 }
+
+.pl-10 {
+    padding-left: 10vw;
+}

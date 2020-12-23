@@ -57,8 +57,8 @@
 
                         <hr/>
                     
-                        <h:commandButton styleClass="btn btn-lg btn-outline-primary float-right" value="#{adminMsg['submitBtn']}">
-                            <f:ajax listener="#{orderBean.saveOrder()}" onerror="alert('checkout fail')"></f:ajax>
+                        <h:commandButton styleClass="btn btn-lg btn-outline-primary float-right" value="#{adminMsg['submitBtn']}" action="#{orderBean.saveOrder()}">
+                            
                         </h:commandButton>
                     </h:form>
                 </c:if>

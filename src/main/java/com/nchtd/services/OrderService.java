@@ -27,13 +27,16 @@ import org.hibernate.SessionFactory;
 public class OrderService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public List<Payment> getAll() {
+    public List<Payment> getAll(boolean done) {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Payment> query = builder.createQuery(Payment.class);
             Root<Payment> root = query.from(Payment.class);
             
             query = query.select(root).orderBy(builder.desc(root.get("returnDate")));
+            if(done) {
+                query.where(builder.isNull(root.get("returnDate")));
+            }
             
             Query q = session.createQuery(query);
             
@@ -72,6 +75,11 @@ public class OrderService {
             }
             
             return true;
+        }
+    }
+    public Payment getById(int id) {
+        try (Session session = FACTORY.openSession()) {
+            return session.get(Payment.class, id);
         }
     }
 }

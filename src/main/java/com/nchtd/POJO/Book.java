@@ -245,7 +245,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.Book[ id=" + id + " ]";
+        return String.valueOf(id);
     }
     
 }

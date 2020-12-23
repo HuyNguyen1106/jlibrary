@@ -20,7 +20,7 @@
             </c:if>
         </h:link>
         <c:if test="#{facesContext.externalContext.sessionMap.get('user') != null}">
-            <h:link styleClass="nav-link" value="Logout" outcome="#{userBean.logout()}"></h:link>
+            <h:link styleClass="nav-link" value="#{adminMsg['link.logout']}" outcome="#{userBean.logout()}"></h:link>
         </c:if>
       </nav>
   </ui:composition>

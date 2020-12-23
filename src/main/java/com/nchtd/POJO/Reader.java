@@ -194,7 +194,7 @@ public class Reader implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nchtd.POJO.Reader[ id=" + id + " ]";
+        return String.valueOf(id);
     }
     
 }
