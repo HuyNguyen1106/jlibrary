@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 public class UserBean implements Serializable{
     private final static UserService userService = new UserService();
-    private int userId;
+    private Integer usId;
     private String username;
     private String password;
     private String email;
@@ -37,6 +37,21 @@ public class UserBean implements Serializable{
      * Creates a new instance of UserBean
      */
     public UserBean() {
+        if (!FacesContext.getCurrentInstance().isPostback()){
+            String userId = FacesContext
+                .getCurrentInstance()
+                .getExternalContext()
+                .getRequestParameterMap()
+                .get("user_id");
+            if (userId != null && !userId.isEmpty()){    
+                User user = userService.getUserById(Integer.parseInt(userId));
+                this.usId = user.getId();
+                this.username = user.getUsername();
+                this.password = user.getPassword();
+                this.email = user.getEmail();
+                this.role = user.getRole();
+            }
+        }
     }
     
     public String checkAuth() {
@@ -125,7 +140,12 @@ public class UserBean implements Serializable{
 //    }
     
     public String addUser() {
-        User u = new User();
+        User u ;
+        if (this.getUsId() != null){
+            u = userService.getUserById(this.getUsId());
+        } else {
+            u = new User();
+        }
         u.setUsername(this.username);
         u.setPassword(this.password);
         u.setEmail(this.email);
@@ -175,14 +195,14 @@ public class UserBean implements Serializable{
      * @return the userId
      */
     public int getUserId() {
-        return userId;
+        return getUsId();
     }
 
     /**
      * @param userId the userId to set
      */
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.setUsId((Integer) userId);
     }
 
     /**
@@ -239,5 +259,19 @@ public class UserBean implements Serializable{
      */
     public void setRole(int role) {
         this.role = role;
+    }
+
+    /**
+     * @return the usId
+     */
+    public Integer getUsId() {
+        return usId;
+    }
+
+    /**
+     * @param usId the usId to set
+     */
+    public void setUsId(Integer usId) {
+        this.usId = usId;
     }
 }

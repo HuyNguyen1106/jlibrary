@@ -45,14 +45,12 @@
                         <h:link class="btn btn-info" value="#{adminMsg['editBtn']}" includeViewParams="true" outcome="/admin/books/create?faces-redirect=true">
                                 <f:param name="book_id" value="#{i.id}"/>
                         </h:link>
-                    
-                        <h:commandLink class="btn btn-danger ml-2" value="#{adminMsg['deleteBtn']}">
+                        <h:commandLink class="btn btn-danger ml-2" value="#{adminMsg['deleteBtn']}" action="#{bookBean.deleteBook(i)}">
                             <f:ajax onerror="deleteError" onevent="deleteSuccess"/>
                         </h:commandLink>
                     </h:form>
                 </h:column>
             </h:dataTable>
-            
         </ui:define>
     </ui:composition>
 </html>

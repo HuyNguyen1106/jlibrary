@@ -28,7 +28,7 @@ public class CategoryService {
             CriteriaQuery query = builder.createQuery();
             Root<Category> root = query.from(Category.class);
             
-            query = query.select(root);
+            query = query.select(root).where(builder.equal(root.get("active"), 1));
             
             Query q = session.createQuery(query);
             

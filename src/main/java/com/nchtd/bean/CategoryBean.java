@@ -57,6 +57,7 @@ public class CategoryBean {
         }         
         c.setTitle(this.getTitle());
         c.setDescription(this.getDescription());
+        c.setActive(Short.parseShort("1"));
         
         if(categoryService.addOrSave(c) == true) {
             return "index?faces-redirect=true";
@@ -65,8 +66,8 @@ public class CategoryBean {
     }
     public String deleteCategory (Category cate) throws Exception{
         cate.setActive(Short.parseShort("0"));
-        if (categoryService.deleteCate(cate) == true){
-            return "successful";
+        if (categoryService.addOrSave(cate) == true){
+            return "index?faces-redirect=true";
         }
         throw new Exception("Delete failed");
     }

@@ -6,6 +6,7 @@
 package com.nchtd.services;
 
 import com.nchtd.POJO.Book;
+import com.nchtd.POJO.Category;
 import com.nchtd.config.HibernateUtils;
 import java.util.List;
 import javax.persistence.Query;
@@ -22,14 +23,16 @@ import org.hibernate.SessionFactory;
 public class BookService {
     private final static SessionFactory FACTORY = HibernateUtils.getFACTORY();
     
-    public List<Book> getAll() {
+    public List<Book> getAll(Category cate) {
         try (Session session = FACTORY.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Book> query = builder.createQuery(Book.class);
             Root<Book> root = query.from(Book.class);
             
-            query = query.select(root);
-            
+            query = query.select(root).where(builder.equal(root.get("active"), 1));
+            if (cate != null){
+                query.where(builder.equal(root.get("categoryId").as(Category.class), cate));
+            }
             Query q = session.createQuery(query);
             
             return q.getResultList();
@@ -52,6 +55,11 @@ public class BookService {
                 return false;
             }
             return true;
+        }
+    }
+    public Book getBookById(int bookId){
+        try (Session session = FACTORY.openSession()){
+            return session.get(Book.class, bookId);
         }
     }
 }

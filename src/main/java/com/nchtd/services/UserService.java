@@ -109,11 +109,10 @@ public class UserService {
         }
         return true;
     }
-    
-//    public int[] roleList() {
-//        int[] rs = new int[2];
-//        rs[1] = 1;//ADMIN
-//        rs[2] = 2;
-//        return rs;
-//    }
+
+    public User getUserById(int userId){
+        try (Session session = FACTORY.openSession()){
+            return session.get(User.class, userId);
+        }
+    }
 }

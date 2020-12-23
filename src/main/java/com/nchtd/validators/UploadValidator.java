@@ -23,7 +23,7 @@ public class UploadValidator implements Validator{
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         Part p = (Part) value;
-        if (!p.getContentType().equals("image/png") && !p.getContentType().equals("image/jpg")) {
+        if (!p.getContentType().equals("image/png") && !p.getContentType().equals("image/jpeg")) {
             FacesMessage msg = new FacesMessage("Need: png/jpg, current: "+ p.getContentType());
             throw new ValidatorException(msg);
         }

@@ -8,10 +8,12 @@ package com.nchtd.bean;
 import com.nchtd.POJO.Book;
 import com.nchtd.POJO.Category;
 import com.nchtd.services.BookService;
+import com.nchtd.services.CategoryService;
 import com.sun.istack.logging.Logger;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ import javax.servlet.http.Part;
 @ManagedBean
 public class BookBean {
     private static final BookService bookService = new BookService();
+    private Integer bkId;
     private String title;
     private String description;
     private String author;
@@ -37,16 +40,47 @@ public class BookBean {
     private Category categoryId;
     private Integer releaseYear;
     private Part imageFile;
+    private Category cateId;
     
     
     /**
      * Creates a new instance of BookBean
      */
     public BookBean() {
+        String id = FacesContext
+                .getCurrentInstance()
+                .getExternalContext()
+                .getRequestParameterMap()
+                .get("cate_id");
+        if (id != null && !id.isEmpty()){
+            this.cateId = new CategoryService().getById(Integer.parseInt(id));
+        }
+        if (!FacesContext.getCurrentInstance().isPostback()){
+            String bookId = FacesContext
+                .getCurrentInstance()
+                .getExternalContext()
+                .getRequestParameterMap()
+                .get("book_id");
+            if (bookId != null && !bookId.isEmpty()){    
+                Book book = bookService.getBookById(Integer.parseInt(bookId));
+                this.bkId = book.getId();
+                this.title = book.getTitle();
+                this.description = book.getDescription();
+                this.author = book.getAuthor();
+                this.unitPrice = book.getUnitPrice();
+                this.categoryId = book.getCategoryId();
+                this.releaseYear = book.getReleaseYear();
+            }
+        }
     }
     
     public String addBook() throws IOException {
-        Book b = new Book();
+        Book b ;
+        if (this.getBkId()!= null){
+            b = bookService.getBookById(this.getBkId());
+        } else {
+            b = new Book(); 
+        }
         b.setActive(Short.parseShort("1"));
         b.setTitle(this.title);        
         b.setDescription(this.description);
@@ -60,8 +94,10 @@ public class BookBean {
         b.setAvailableCount(0);
         b.setTotalCount(0);
         try {
-            this.uploadFile();
-            b.setImage("upload/"+this.imageFile.getSubmittedFileName());
+            if(this.bkId == null) {
+                this.uploadFile();
+                b.setImage(this.imageFile.getSubmittedFileName());
+            }
             if(bookService.addOrSave(b) == true) {
                 return "index?faces-redirect=true";
             }
@@ -85,9 +121,15 @@ public class BookBean {
             }
         }
     }
-    
+    public String deleteBook (Book book) throws Exception{
+        book.setActive(Short.parseShort("0"));
+        if (bookService.addOrSave(book) == true){
+            return "index?faces-redirect=true";
+        }
+        throw new Exception("Delete failed");
+    }
     public List<Book> getBooks() {
-        return bookService.getAll();
+        return bookService.getAll(this.cateId);
     }
 
     /**
@@ -186,5 +228,33 @@ public class BookBean {
      */
     public void setImageFile(Part imageFile) {
         this.imageFile = imageFile;
+    }
+
+    /**
+     * @return the bId
+     */
+    public Integer getbId() {
+        return getBkId();
+    }
+
+    /**
+     * @param bId the bId to set
+     */
+    public void setbId(Integer bId) {
+        this.setBkId(bId);
+    }
+
+    /**
+     * @return the bkId
+     */
+    public Integer getBkId() {
+        return bkId;
+    }
+
+    /**
+     * @param bkId the bkId to set
+     */
+    public void setBkId(Integer bkId) {
+        this.bkId = bkId;
     }
 }

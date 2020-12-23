@@ -6,7 +6,7 @@
     </context-param>
     <context-param>
         <param-name>uploadPath</param-name>
-        <param-value>E:\Projects\Java\jlibrary\src\main\webapp\resources\images\upload\</param-value>
+        <param-value>D:\Java\jlibrary\src\main\webapp\resources\images\upload\</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
